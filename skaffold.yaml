@@ -1,0 +1,24 @@
+apiVersion: skaffold/v2beta26 # Use the latest version of Skaffolds
+kind: Config
+build:
+  local:
+    push: false # Set to true if you want to push the image to a registry
+  artifacts:
+    - image: ahmedoun96/auth
+      context: auth # Path to the Dockerfile for the auth service
+      docker:
+        dockerfile: Dockerfile # Specify the Dockerfile if it's not named 'Dockerfile'
+      sync:
+        #auto: true # Enable automatic syncing of files
+        manual:
+          - src: 'src/**/*.ts'
+            dest: '.' # Sync all TypeScript files in the src directory
+          - src: 'package.json'
+            dest: '.'
+          - src: 'tsconfig.json'
+            dest: '.' # Sync the tsconfig.json file
+deploy:
+  kubectl:
+    manifests:
+      - infra/k8s/* # Path to the Kubernetes deployment manifest for the auth service
+      - infra/k8s-dev/* # Path to the Kubernetes service manifest for the auth service

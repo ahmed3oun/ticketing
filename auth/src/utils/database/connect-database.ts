@@ -15,7 +15,6 @@ const connectDatabase = async () => {
     } catch (error) {
         console.error('Error connecting to MongoDB:', error);
         throw new ErrorHandler('Error connecting to MongoDB', 500);
-
     }
 }
 export default connectDatabase;

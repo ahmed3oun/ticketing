@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import compression from 'compression';
 import cors from 'cors';
-import routes from './routes/api';
+import apiRouter from './routes/api';
 import cookieSession from "cookie-session";
 
 
@@ -22,15 +22,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use('public', express.static(__dirname + '/public'));
 
 // Define a simple health check route
-app.get('/health', (req: Request, res: Response) => {
+app.get('/api/v1/user/health', (req: Request, res: Response) => {
     res.status(200).send({
-        message: 'OK',
+        message: 'auth service works fine!!!!',
         status: 200,
         error: null,
     });
 });
+// curl http://ticketing.dev/api/v1/user/health
 
-app.use('/api/v1', routes);
+app.use('/api/v1', apiRouter);
 
 
 

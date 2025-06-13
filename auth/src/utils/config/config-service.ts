@@ -17,10 +17,7 @@ class ConfigService {
     private loadConfig(): void {
         // Load configuration from environment variables or a config file
         this.config = {
-            port: process.env.PORT || 3000,
-            dbUrl: process.env.DB_URL || 'mongodb://localhost:27017/ticketing',
-            jwtSecret: process.env.JWT_SECRET || 'your_jwt_secret',
-            // Add more configuration options as needed
+            ...process.env, // Load all environment variables
         };
     }
 
@@ -28,11 +25,12 @@ class ConfigService {
         return this.config[key];
     }
 
-    public getOrElseThrow(key: string): any {
+    public getOrElseThrow(key: string): string {
         const value = this.config[key];
         if (value === undefined) {
             throw new Error(`Configuration key "${key}" not found`);
         }
+        return value;
     }
 }
 

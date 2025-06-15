@@ -17,8 +17,19 @@ build:
             dest: '.'
           - src: 'tsconfig.json'
             dest: '.' # Sync the tsconfig.json file
+    - image: ahmedoun96/client
+      context: client # Path to the Dockerfile for the auth service
+      docker:
+        dockerfile: Dockerfile # Specify the Dockerfile if it's not named 'Dockerfile'
+      sync:
+        #auto: true # Enable automatic syncing of files
+        manual:
+          - src: 'src/**/*.js'
+            dest: '.' # Sync all JavaScript files in the src directory
+          - src: 'package.json'
+            dest: '.'
 deploy:
   kubectl:
     manifests:
-      - infra/k8s/* # Path to the Kubernetes deployment manifest for the auth service
-      - infra/k8s-dev/* # Path to the Kubernetes service manifest for the auth service
+      - infra/k8s/* # Path to the Kubernetes deployment and services manifests 
+      - infra/k8s-dev/* # Path to the Kubernetes ingress manifest

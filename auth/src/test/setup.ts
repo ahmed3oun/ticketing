@@ -2,6 +2,7 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import request from 'supertest';
 import app from '../app';
+import configService from '../utils/config/config-service';
 
 declare global {
     var signin: () => Promise<string[]>;
@@ -14,9 +15,8 @@ beforeAll(async () => {
     process.env.JWT_KEY = 'xsdflkjqwe1234';
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // Disable TLS certificate validation for testing
 
-    console.log(`JWT_KEY: ${process.env.JWT_KEY}`);
-    console.log(`NODE_TLS_REJECT_UNAUTHORIZED: ${process.env.NODE_TLS_REJECT_UNAUTHORIZED}`);
-
+    configService.loadConfig();
+    console.log('Config loaded:', configService.get('JWT_KEY'), configService.get('NODE_TLS_REJECT_UNAUTHORIZED'));
     // mongo = new MongoMemoryServer();
     mongo = await MongoMemoryServer.create({
         instance: {

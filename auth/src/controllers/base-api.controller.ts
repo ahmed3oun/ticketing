@@ -2,7 +2,7 @@ import ErrorHandler from "../utils/errors/error-handler";
 import { Request, Response } from "express";
 
 
-interface CurrentUser {
+export interface CurrentUser {
     id: string;
     email: string;
 }

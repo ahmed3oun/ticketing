@@ -46,7 +46,7 @@ class AuthApiController extends BaseApiController {
             const token = jwt.sign({
                 id: user.id,
                 email: user.email,
-            }, process.env.JWT_KEY!);
+            }, configService.get('JWT_KEY')!);
 
             this.req.session = {
                 jwt: token
@@ -86,7 +86,7 @@ class AuthApiController extends BaseApiController {
             const token = jwt.sign({
                 id: newUser.id,
                 email: newUser.email,
-            }, process.env.JWT_KEY!);
+            }, configService.get('JWT_KEY')!);
             if (!token) {
                 throw new ErrorHandler('Failed to create JWT token', 500);
             }

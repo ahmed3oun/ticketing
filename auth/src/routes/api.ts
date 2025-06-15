@@ -1,3 +1,4 @@
+import istAuthenticated from "../middlewares/is-authenticated.middleware";
 import AuthApiController from "../controllers/auth.controller";
 import UserApiController from "../controllers/user.controller";
 import { Request, Response, Router } from "express";
@@ -19,6 +20,7 @@ apiRouter.post(
 );
 apiRouter.get(
     '/user/get-current-user',
+    istAuthenticated,
     async (req: Request, res: Response) => { await new UserApiController(req, res).getMe() }
 );
 // apiRouter.post('/user/update-profile', async (req: Request, res: Response) => await new UserApiController(req, res).updateProfile());

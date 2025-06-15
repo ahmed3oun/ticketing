@@ -17,111 +17,37 @@ class AuthApiController extends BaseApiController {
     async signin() {
         // TODO: user sign in
         try {
-            const {
-                login,
-                password
-            } = this.getBody()
 
-            const body: signinBody = {
-                login: cleanString(login)!.toLowerCase(),
-                password: String(password!).trim()
+            const { email, password } = this.getBody() as { email: string; password: string; };
+            if (!email || !password) {
+                throw new ErrorHandler('Login and Password are required', 400);
+            }
+            if (!validator.isEmail(email)) {
+                throw new ErrorHandler('Login must be a valid email address', 400);
+            } else if (password.length < 6) {
+                throw new ErrorHandler('Password must contain at least 6 characters', 400);
+            }
+            const user = await this.userService.getUserByEmail(email);
+
+            if (!user) {
+                throw new ErrorHandler('User with this email does not exist', 400);
             }
 
-            if (validator.isEmpty(body.login!) || validator.isEmpty(body.password!)) {
-                throw new ErrorHandler({
-                    message: 'Login and Password are required',
-                    statusCode: 400
-                });
-            } else if (body.password?.length! < 6) {
-                throw new ErrorHandler({
-                    message: 'Password must contains at least 6 characters',
-                    statusCode: 400
-                });
-            } else if (!validator.isEmail(body.login!) && body.login!.length <= 30) {
-                // Login as username
-                const is_existed = await userService.isExistsByUsername({
-                    username: body.login!
-                })
-                if (!is_existed) {
-                    throw new ErrorHandler({
-                        message: 'Unexisted Username',
-                        statusCode: 400
-                    });
-                } else {
-                    const user = await userService.findByUsername({
-                        username: body.login!
-                    })
-
-                    if (!user?.comparePassword(body.password!)) {
-                        throw new ErrorHandler({
-                            message: 'Password is incorrect',
-                            statusCode: 401,
-                        })
-                    }
-
-                    if (!user.is_verified) {
-                        throw new ErrorHandler({
-                            message: 'Account is not activated! Check your email',
-                            statusCode: 400
-                        });
-                    }
-
-                    const login_data = await authService.generateLoginData({
-                        user
-                    })
-
-                    return this.response.status(200).send({
-                        success: true,
-                        message: 'Logged In successfully',
-                        ...login_data
-                    })
-                }
-
-            } else if (validator.isEmail(body.login!)) {
-                // login as email address
-                const is_existed = await userService.isExists({
-                    email: body.login!
-                })
-                if (!is_existed) {
-                    throw new ErrorHandler({
-                        message: 'Unexisted Email',
-                        statusCode: 400
-                    });
-                } else {
-                    const user = await userService.findByEmail({
-                        email: body.login!
-                    })
-                    const isMatchedPwd = user?.comparePassword(body.password!)
-                    if (!isMatchedPwd) {
-                        throw new ErrorHandler({
-                            message: 'Password is incorrect',
-                            statusCode: 401,
-                        })
-                    }
-
-                    if (!user!.is_verified) {
-                        throw new ErrorHandler({
-                            message: 'Account is not activated! Check your email',
-                            statusCode: 400
-                        });
-                    }
-
-                    const login_data = await authService.generateLoginData({
-                        user: user!
-                    })
-
-                    return this.response.status(200).send({
-                        success: true,
-                        message: 'Logged In successfully',
-                        ...login_data
-                    })
-                }
-            } else {
-                throw new ErrorHandler({
-                    message: 'Invalid login',
-                    statusCode: 401
-                });
+            const isMatchedPwd = await bcryptjs.compare(password, user.password);
+            if (!isMatchedPwd) {
+                throw new ErrorHandler('Password is incorrect', 400);
             }
+
+            const token = jwt.sign({
+                id: user.id,
+                email: user.email,
+            }, configService.get('JWT_KEY')!);
+
+            this.req.session = {
+                jwt: token
+            }
+
+            return this.res.status(200).send(user)
 
         } catch (error: any) {
             return this.sendResponseError({
@@ -135,81 +61,50 @@ class AuthApiController extends BaseApiController {
     // /auth/signup
     async signup() {
         try {
-            const {
-                username,
+
+            const { email, password } = this.getBody() as { email: string; password: string; };
+            if (!email || !password) {
+                throw new ErrorHandler('Login and Password are required', 400);
+            }
+            if (!validator.isEmail(email)) {
+                throw new ErrorHandler('Login must be a valid email address', 400);
+            } else if (password.length < 6) {
+                throw new ErrorHandler('Password must contain at least 6 characters', 400);
+            }
+
+            const user = await this.userService.getUserByEmail(email);
+
+            if (user) {
+                throw new ErrorHandler('User with this email already exists', 400);
+            }
+
+            const newUser = await this.userService.createUser({
                 email,
-                first_name,
-                last_name,
-                password,
-                role,
-                phone
-            } = this.getBody()
+                password
+            });
 
-            const body: signupBody = {
-                username: cleanString(username)!.toLowerCase(),
-                email: email.trim().toLowerCase(),
-                first_name: cleanString(first_name)!,
-                last_name: cleanString(last_name)!,
-                password,
-                role: role.trim().toUpperCase(),
-                phone: phone.trim()
+            const token = jwt.sign({
+                id: newUser.id,
+                email: newUser.email,
+            }, configService.get('JWT_KEY')!);
+            if (!token) {
+                throw new ErrorHandler('Failed to create JWT token', 500);
+            }
+            this.req.session = {
+                jwt: token
             }
 
-            if (!email || !validator.isEmail(email)) {
-                throw new ErrorHandler({
-                    message: `Email is required with valid format.`,
-                    statusCode: 400
-                })
-            } else if (!username || !(String(body.username).trim().length > 0 && String(username).trim().length <= 30)) {
-                throw new ErrorHandler({
-                    message: `Username is required and cannot be longer than 30 characters.`,
-                    statusCode: 400
-                })
-            } else if (!password || String(body.password).trim().length < 6) {
-                throw new ErrorHandler({
-                    message: `Password must have at least 6 characters`,
-                    statusCode: 400
-                })
-            } else if (!body.role || !([
-                String(Role.Admin),
-                String(Role.Doctor),
-                String(Role.Patient)
-            ].includes(String(body.role)))) {
-                throw new ErrorHandler({
-                    message: `Role is required and cannot be different to (${Role.Admin}, ${Role.Doctor}, ${Role.Patient})`,
-                    statusCode: 400
-                })
+            return this.res.status(201).send(newUser);
 
-            } else if (!body.phone || !(validator.isMobilePhone(body.phone!))) {
-                throw new ErrorHandler({
-                    message: `Phone is required with valid format`,
-                    statusCode: 400
-                })
-            }
-
-            const is_exists = await userService.isExists({ email: body.email! })
-
-            if (is_exists) {
-                throw new ErrorHandler({
-                    message: `Email address is already exists`,
-                    statusCode: 400
-                });
-            }
-
-            const new_user = await userService.create({ body })
-
-            const {
-                preview
-            } = await authService.sendWelcomeEmail({
-                user: new_user
-            })
-
-            return this.response.status(201).json({
-                success: true,
-                message: 'Registered successfully!',
-                ...new_user,
-                preview
-            })
+        } catch (error: any) {
+            return this.sendError(error);
+        }
+    }
+    // /user/signout
+    async signout() {
+        try {
+            this.req.session = null;
+            return this.res.status(204).send();
 
         } catch (error: any) {
             return this.sendResponseError({

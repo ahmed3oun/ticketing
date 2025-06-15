@@ -1,12 +1,29 @@
-import { Response, Router } from "express";
+import istAuthenticated from "../middlewares/is-authenticated.middleware";
+import AuthApiController from "../controllers/auth.controller";
+import UserApiController from "../controllers/user.controller";
+import { Request, Response, Router } from "express";
 
 const apiRouter: Router = Router();
 
 
-apiRouter.post('/user/login', (req, res) => console.log('Login route hit'));
-apiRouter.post('/user/register', (req, res) => console.log('Register route hit'));
-apiRouter.post('/user/logout', (req, res) => console.log('Logout route hit'));
-apiRouter.get('/user/get-current-user', (req, res) => console.log('Get user route hit'));
+apiRouter.post(
+    '/user/login',
+    async (req: Request, res: Response) => { await new AuthApiController(req, res).signin() }
+);
+apiRouter.post(
+    '/user/register',
+    async (req: Request, res: Response) => { await new AuthApiController(req, res).signup() }
+);
+apiRouter.post(
+    '/user/logout',
+    async (req: Request, res: Response) => { await new AuthApiController(req, res).signout() }
+);
+apiRouter.get(
+    '/user/get-current-user',
+    istAuthenticated,
+    async (req: Request, res: Response) => { await new UserApiController(req, res).getMe() }
+);
+// apiRouter.post('/user/update-profile', async (req: Request, res: Response) => await new UserApiController(req, res).updateProfile());
 
 // Additional authentication routes
 // apiRouter.post('/auth/refresh-token', (req, res) => console.log('Refresh token route hit'));

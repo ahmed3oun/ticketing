@@ -14,7 +14,7 @@ class ConfigService {
         return ConfigService.instance;
     }
 
-    private loadConfig(): void {
+    public loadConfig(): void {
         // Load configuration from environment variables or a config file
         this.config = {
             port: process.env.PORT || 3000,

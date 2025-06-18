@@ -2,9 +2,10 @@
 import axios from 'axios';
 import { createContext, useState, useContext, useEffect } from 'react';
 
-const AuthContext = createContext({
+export const AuthContext = createContext({
     user: null,
-    login: async () => { },
+    login: async (email, password) => { },
+    register: async (email, password) => { },
     logout: () => { },
     loading: true,
 })
@@ -36,7 +37,20 @@ export function AuthProvider({ children }) {
                 password: password
             })
 
-            return res.data
+            return { data: res.data, status: res.status }
+        } catch (error) {
+            throw new Error(error.response.message);
+        }
+    }
+
+    const register = async (email, password) => {
+        try {
+            const res = await axios.post('/api/v1/user/register', {
+                email: email,
+                password: password
+            })
+
+            return { data: res.data, status: res.status }
         } catch (error) {
             throw new Error(error.response.message);
         }
@@ -49,11 +63,13 @@ export function AuthProvider({ children }) {
 
 
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, register, logout, loading }}>
             {children}
         </AuthContext.Provider>
     )
 }
 
-export const useAuth = () => useContext(AuthContext)
+// export const useAuth = () => {
+//     return useContext(AuthContext)
+// }
 

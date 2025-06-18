@@ -1,11 +1,12 @@
 'use client'
 import ProtectedRoute from "@/components/protected-route";
-import { useAuth } from "./context/auth-context";
+import { AuthContext, useAuth } from "./context/auth-context";
 import Tickets from "@/components/tickets";
+import { useContext } from "react";
 
 
 export default function Home() {
-    const { user } = useAuth();
+    const { user } = useContext(AuthContext)
     //const data = await fetch('https://api.vercel.app/blog')
     //const posts = await data.json()
 

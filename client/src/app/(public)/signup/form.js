@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFormStatus } from "react-dom";
-import { signin } from '@/app/actions/auth';
+import { signup } from '@/app/actions/auth';
 import { useActionState } from "react";
 
 
-export default function SigninForm() {
-    const [state, action] = useActionState(signin, undefined)
+export default function SignupForm() {
+    const [state, action] = useActionState(signup, undefined)
 
     return (
         <>
@@ -38,19 +38,19 @@ export default function SigninForm() {
                             <p className="text-sm text-red-500">{state.errors.password}</p>
                         )
                     }
-                    <LoginButton />
+                    <RegisterButton />
                 </div>
             </form>
         </>
     );
 }
 
-export function LoginButton() {
+export function RegisterButton() {
     const { pending } = useFormStatus();
 
     return (
         <Button className={'mt-2 cursor-pointer'} variant="outline" type="submit" role='button' disabled={pending}>
-            {pending ? "Logging in..." : "Login"}
+            {pending ? "Signing up..." : "Register"}
         </Button>
     )
 }

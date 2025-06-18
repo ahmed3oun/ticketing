@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/
 import buildClient from "@/app/context/build-client"
 
 
-export default Tickets = async () => {
+const Tickets = async () => {
     let tickets = null
     try {
         const client = buildClient()
@@ -51,3 +51,5 @@ export default Tickets = async () => {
     )
 
 }
+
+export default Tickets;

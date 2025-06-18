@@ -34,12 +34,12 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased font-[family-name:var(--font-inter)`}
       >
         <div>
-          <Header />
-          <main className="container mx-auto mt-8 flex min-h-screen max-w-7xl justify-center">
-            <AuthProvider>
+          <AuthProvider>
+            <Header />
+            <main className="container mx-auto mt-8 flex min-h-screen max-w-7xl justify-center">
               {children}
-            </AuthProvider>
-          </main>
+            </main>
+          </AuthProvider>
           <Footer />
         </div>
       </body>

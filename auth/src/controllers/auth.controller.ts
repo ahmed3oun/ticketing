@@ -100,7 +100,7 @@ class AuthApiController extends BaseApiController {
             return this.sendError(error);
         }
     }
-    // /user/signout
+    // /user/logout
     async signout() {
         try {
             this.req.session = null;

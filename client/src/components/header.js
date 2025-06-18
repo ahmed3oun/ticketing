@@ -1,12 +1,26 @@
+'use client'
 import Link from "next/link";
 import { MenuIcon } from "./ui/icons";
+import { AuthContext, useAuth } from "@/app/context/auth-context";
+import { useContext } from "react";
 
 
-const Links = ({ links }) => {
+const Links = () => {
+    const { user } = useContext(AuthContext)
+
+    const links = [
+        user && { name: 'Home', path: '/' },
+        user && { name: 'New Ticket', path: '/tickets/new' },
+        user && { name: 'New Order', path: '/orders/new' },
+        user && { name: 'Orders', path: '/orders' },
+        { name: 'Login', path: '/login' },
+        { name: 'Register', path: '/signup' }
+    ];
+
     return (
         <>
             {links.map((link) => (
-                <Link
+                link && <Link
                     key={link.name}
                     className="text-gray-900 hover:text-gray-600 transition-colors"
                     href={link.path}
@@ -20,20 +34,11 @@ const Links = ({ links }) => {
 }
 
 const Header = () => {
-
-    const links = [
-        { name: 'Home', path: '/' },
-        { name: 'Orders', path: '/orders' },
-        { name: 'Login', path: '/login' },
-        { name: 'Register', path: '/register' }
-    ];
-
-
     return (
         <div className="border-b border-gray-100">
             <div className="container mx-auto flex max-w-xl items-center justify-end p-4 md:justify-between md:px-6">
                 <nav className="hidden items-center space-x-4 text-sm md:flex">
-                    <Links links={links} />
+                    <Links />
                 </nav>
                 <div className="hidden items-center space-x-4 md:flex">
                     <Link

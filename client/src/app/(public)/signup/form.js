@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { useFormStatus } from "react-dom";
 import { signup } from '@/app/actions/auth';
 import { useActionState } from "react";
+import { LogIn } from "lucide-react";
 
 
 export default function SignupForm() {
@@ -50,7 +51,7 @@ export function RegisterButton() {
 
     return (
         <Button className={'mt-2 cursor-pointer'} variant="outline" type="submit" role='button' disabled={pending}>
-            {pending ? "Signing up..." : "Register"}
+            {pending ? "Signing up..." : "Register"} <LogIn className="mx-1" size={16} />
         </Button>
     )
 }

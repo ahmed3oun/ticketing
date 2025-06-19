@@ -1,8 +1,8 @@
 'use client'
 import Link from "next/link";
-import { MenuIcon } from "./ui/icons";
 import { AuthContext, useAuth } from "@/app/context/auth-context";
 import { useContext } from "react";
+import { LogIn, LogOut } from "lucide-react";
 
 
 const Links = () => {
@@ -13,8 +13,8 @@ const Links = () => {
         user && { name: 'New Ticket', path: '/tickets/new' },
         user && { name: 'New Order', path: '/orders/new' },
         user && { name: 'Orders', path: '/orders' },
-        { name: 'Login', path: '/login' },
-        { name: 'Register', path: '/signup' }
+        !user && { name: 'Login', path: '/login' },
+        !user && { name: 'Register', path: '/signup' }
     ];
 
     return (
@@ -34,6 +34,8 @@ const Links = () => {
 }
 
 const Header = () => {
+    const { user } = useContext(AuthContext)
+
     return (
         <div className="border-b border-gray-100">
             <div className="container mx-auto flex max-w-xl items-center justify-end p-4 md:justify-between md:px-6">
@@ -41,15 +43,24 @@ const Header = () => {
                     <Links />
                 </nav>
                 <div className="hidden items-center space-x-4 md:flex">
-                    <Link
-                        className="rounded-md border px-4 py-1.5 text-sm font-medium transition-colors hover:bg-black hover:text-white"
-                        href="/login">
-                        Login
-                    </Link>
-                    <button className="inline-flex rounded-md md:hidden" type="button">
+                    {
+                        user ?
+                            <Link
+                                className="flex justify-center items-start rounded-md border px-4 py-1.5 text-sm font-medium transition-colors hover:bg-black hover:text-white"
+                                href="/logout">
+                                Logout <LogOut className="mx-1" size={16} />
+                            </Link> :
+                            <Link
+                                className="flex justify-center items-start rounded-md border px-4 py-1.5 text-sm font-medium transition-colors hover:bg-black hover:text-white"
+                                href="/login">
+                                Login <LogIn className="mx-1" size={16} />
+                            </Link>
+                    }
+
+                    {/* <button className="inline-flex rounded-md md:hidden" type="button">
                         <MenuIcon className="h-6 w-6" />
                         <span className="sr-only">Toggle Menu</span>
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div >

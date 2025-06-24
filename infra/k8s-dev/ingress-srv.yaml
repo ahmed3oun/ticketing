@@ -20,6 +20,13 @@ spec:
                 name: auth-srv
                 port:
                   number: 3000
+          - path: /api/v1/tickets/?(.*)
+            pathType: ImplementationSpecific # This allows regex paths
+            backend:
+              service:
+                name: tickets-srv
+                port:
+                  number: 3000
           - path: /?(.*)
             pathType: ImplementationSpecific # This allows regex paths
             backend:

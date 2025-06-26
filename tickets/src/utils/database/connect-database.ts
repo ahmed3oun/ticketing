@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
 import configService from '../config/config-service';
 import ErrorHandler from '../errors/error-handler';
-const connectDatabase = async () => {
+const connectDatabase = async (MONGO_URI: string) => {
     if (configService.get('NODE_ENV') === 'test') {
         return;
     }
 
-    const MONGO_URI = configService.getOrElseThrow('MONGO_URI');
     try {
         const conn = await mongoose.connect(MONGO_URI, {
             authMechanism: 'DEFAULT',

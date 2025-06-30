@@ -2,6 +2,7 @@ import ErrorHandler from "../utils/errors/error-handler";
 import Ticket, { ITicket, TicketDoc } from "../models/ticket.model";
 
 export default class TicketsService {
+
     // Add methods for user service here
     // For example, createTicket, getTicketById, updateTicket, deleteTicket, etc.
 
@@ -13,7 +14,7 @@ export default class TicketsService {
      */
     async create(ticketData: ITicket): Promise<TicketDoc> {
         // Logic to create a user
-        const ticket  = Ticket.build(ticketData);
+        const ticket = Ticket.build(ticketData);
         await ticket.save();
         return ticket;
     }
@@ -25,6 +26,16 @@ export default class TicketsService {
             throw new ErrorHandler(`Ticket with ID ${ticketId} not found`, 404);
         }
         return ticket;
+    }
+
+    getAll() {
+        const tickets = Ticket.find({
+            orderId: undefined // Only return tickets that are not associated with an order
+        });
+        if (!tickets) {
+            throw new ErrorHandler("No tickets found", 404);
+        }
+        return tickets;
     }
 
     async update(ticketId: string, ticketData: ITicket) {

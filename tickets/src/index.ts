@@ -1,6 +1,6 @@
 import app from "./app"
-import { OrderCancelledListener } from "./events/listeners/order-cancelled.listener";
-import { OrderCreatedListener } from "./events/listeners/order-created.listener";
+// import { OrderCancelledListener } from "./events/listeners/order-cancelled.listener";
+// import { OrderCreatedListener } from "./events/listeners/order-created.listener";
 import configService from "./utils/config/config-service";
 import connectDatabase from "./utils/database/connect-database";
 import { natsWrapper } from "./utils/nats/nats.wrapper";
@@ -27,8 +27,8 @@ const start = async () => {
     process.on('SIGINT', () => natsWrapper.client!.close());
     process.on('SIGTERM', () => natsWrapper.client!.close());
 
-    new OrderCreatedListener(natsWrapper.client!).listen();
-    new OrderCancelledListener(natsWrapper.client!).listen();
+    // new OrderCreatedListener(natsWrapper.client!).listen();
+    // new OrderCancelledListener(natsWrapper.client!).listen();
 
     // Connect to MongoDB
     await connectDatabase(MONGO_URI);

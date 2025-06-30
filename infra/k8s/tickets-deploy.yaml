@@ -23,7 +23,8 @@ spec:
                 secretKeyRef:
                   name: jwt-key
                   key: JWT_KEY
-          # kubectl create secret generic jwt-key --from-literal=JWT_KEY=some_secret
+              # openssl rand --hex 32
+              # kubectl create secret generic jwt-key --from-literal=JWT_KEY=some_secret
             - name: PORT
               value: "3000"
             - name: JWT_EXPIRES_TIME

@@ -42,3 +42,8 @@ client/.vercel
 # typescript
 client/*.tsbuildinfo
 client/next-env.d.ts
+
+infra/terraform/.terraform
+infra/terraform/.terraform.lock.hcl
+infra/terraform/*.tfstate*
+infra/terraform/*.tfvars

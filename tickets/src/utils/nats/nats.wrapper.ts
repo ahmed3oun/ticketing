@@ -4,11 +4,12 @@ import nats, { Stan } from 'node-nats-streaming';
 class NatsWrapper {
 
     private _client: Stan | null = null;
+    private isConnected = false; // Track connection state
 
 
 
     public get client(): Stan | null {
-        if (!this.client) {
+        if (!this._client || !this.isConnected) {
             throw new Error('Cannot access NATS client before connecting')
         }
         return this._client
@@ -19,6 +20,7 @@ class NatsWrapper {
 
         return new Promise((resolve, reject) => {
             this._client!.on('connect', () => {
+                this.isConnected = true;
                 console.log('Connected to NATS');
                 resolve();
             });

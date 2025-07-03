@@ -12,10 +12,7 @@ export enum Subjects {
 
 export enum QueueGroupNames {
   TicketsService = 'tickets-service',
-<<<<<<< HEAD
   OrdersService = 'orders-service',
-=======
->>>>>>> 620ead8 (restart repo to fix issue...)
   ExpirationService = 'expiration-service',
   PaymentsService = 'payments-service',
 }

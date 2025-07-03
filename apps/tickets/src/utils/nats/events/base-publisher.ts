@@ -18,7 +18,10 @@ export default abstract class Publisher<T extends IEvent> {
     async publish(data: T['data']): Promise<void> {
         return new Promise((resolve, reject) => {
             const stringifiedData = this.stringifyData(data);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
             this.client.publish(this.subject, stringifiedData, (err) => {
                 if (err) {
                     console.error(`Error publishing event ${this.subject}:`, err);

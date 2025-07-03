@@ -44,7 +44,7 @@ build:
           - src: 'tsconfig.json'
             dest: '.' # Sync the tsconfig.json file
     - image: ahmedoun96/tickets
-      context: tickets # Path to the Dockerfile for the auth service
+      context: apps/tickets # Path to the Dockerfile for the auth service
       docker:
         dockerfile: Dockerfile # Specify the Dockerfile if it's not named 'Dockerfile'
       sync:

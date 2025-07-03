@@ -1,11 +1,18 @@
 import istAuthenticated from "../middlewares/is-authenticated.middleware";
 import TicketsApiController from "../controllers/tickets.controller";
 import { Request, Response, Router } from "express";
+<<<<<<< HEAD
 import OrdersApiController from "../controllers/orders.controller";
 
 const apiRouter: Router = Router();
 
 // Define the API routes for the tickets service
+=======
+
+const apiRouter: Router = Router();
+
+
+>>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
 apiRouter.post(
     '/tickets/create',
     istAuthenticated,
@@ -32,6 +39,7 @@ apiRouter.patch(
     async (req: Request, res: Response) => { await new TicketsApiController(req, res).patch() }
 );
 
+<<<<<<< HEAD
 // Define the API routes for the orders service
 apiRouter.post(
     '/orders/create',
@@ -59,6 +67,8 @@ apiRouter.delete(
     async (req: Request, res: Response) => { await new OrdersApiController(req, res).delete() }
 );
 
+=======
+>>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
 // apiRouter.all('/*', (req: Request, res: Response) => {
 //     res.status(404).send({
 //         status: false,

@@ -3,14 +3,24 @@ import Ticket, { ITicket, TicketDoc } from "../models/ticket.model";
 
 export default class TicketsService {
 
+<<<<<<< HEAD
     // Add methods for ticket service here
+=======
+    // Add methods for user service here
+>>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
     // For example, createTicket, getTicketById, updateTicket, deleteTicket, etc.
 
     constructor() { }
     /**
+<<<<<<< HEAD
      * Creates a new ticket in the database.
      * @param ticketData - The data for the new ticket.
      * @returns The created ticket document.
+=======
+     * Creates a new user in the database.
+     * @param ticketData - The data for the new ticket.
+     * @returns The created user document.
+>>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
      */
     async create(ticketData: ITicket): Promise<TicketDoc> {
         // Logic to create a user
@@ -19,11 +29,14 @@ export default class TicketsService {
         return ticket;
     }
 
+<<<<<<< HEAD
     /**
      * Get a specific ticket in the database.
      * @param ticketId - The data for the specefic Ticket Id.
      * @returns The found ticket document.
      */
+=======
+>>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
     async getById(ticketId: string) {
         // Logic to get a ticket by ID
         const ticket = await Ticket.findById(ticketId);
@@ -33,10 +46,13 @@ export default class TicketsService {
         return ticket;
     }
 
+<<<<<<< HEAD
     /**
      * @description This method retrieves all tickets that are not associated with an order.
      * @returns The founded tickets documents.
      */
+=======
+>>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
     getAll() {
         const tickets = Ticket.find({
             orderId: undefined // Only return tickets that are not associated with an order
@@ -47,12 +63,15 @@ export default class TicketsService {
         return tickets;
     }
 
+<<<<<<< HEAD
     /**
      * Updates a specific ticket in the database.
      * @param ticketId - The ID of the ticket to update.
      * @param ticketData - The data to update the ticket with.
      * @returns The updated ticket document.
      */
+=======
+>>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
     async update(ticketId: string, ticketData: ITicket) {
         // Logic to update a ticket
         const ticket = await Ticket.findByIdAndUpdate(ticketId, ticketData, {

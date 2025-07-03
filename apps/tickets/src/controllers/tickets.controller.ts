@@ -1,5 +1,9 @@
 
+<<<<<<< HEAD
 import { Request, Response } from "express";
+=======
+import e, { Request, Response } from "express";
+>>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
 import ErrorHandler from "../utils/errors/error-handler";
 import BaseApiController from "./base-api.controller";
 import TicketsService from '../services/tickets.service';

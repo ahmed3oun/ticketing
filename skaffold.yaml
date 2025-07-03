@@ -5,7 +5,7 @@ build:
     push: false # Set to true if you want to push the image to a registry
   artifacts:
     - image: ahmedoun96/auth
-      context: auth # Path to the Dockerfile for the auth service
+      context: apps/auth # Path to the Dockerfile for the auth service
       docker:
         dockerfile: Dockerfile # Specify the Dockerfile if it's not named 'Dockerfile'
       sync:
@@ -18,7 +18,7 @@ build:
           - src: 'tsconfig.json'
             dest: '.' # Sync the tsconfig.json file
     - image: ahmedoun96/tickets
-      context: tickets # Path to the Dockerfile for the auth service
+      context: apps/tickets # Path to the Dockerfile for the auth service
       docker:
         dockerfile: Dockerfile # Specify the Dockerfile if it's not named 'Dockerfile'
       sync:
@@ -31,7 +31,7 @@ build:
           - src: 'tsconfig.json'
             dest: '.' # Sync the tsconfig.json file
     - image: ahmedoun96/client
-      context: client # Path to the Dockerfile for the auth service
+      context: apps/client # Path to the Dockerfile for the auth service
       docker:
         dockerfile: Dockerfile # Specify the Dockerfile if it's not named 'Dockerfile'
       sync:
@@ -44,5 +44,5 @@ build:
 deploy:
   kubectl:
     manifests:
-      - infra/k8s/* # Path to the Kubernetes deployment and services manifests 
-      - infra/k8s-dev/* # Path to the Kubernetes ingress manifest
+      - infra/k8s/* # Path to the Kubernetes deployment, ingress and services manifests 
+      # - infra/k8s-dev/* # Path to the Kubernetes ingress manifest

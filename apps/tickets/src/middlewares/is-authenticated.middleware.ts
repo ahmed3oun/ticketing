@@ -5,7 +5,6 @@ import jwt from 'jsonwebtoken';
 
 const istAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     const token: string = req.session?.jwt;
-    console.log(`Token: ${token}`); // Debugging line to check the token value
 
     if (!token) {
         res.status(401).send({ message: 'Not authenticated' });

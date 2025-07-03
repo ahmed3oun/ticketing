@@ -1,33 +1,19 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-import request from 'supertest';
-import app from '../app';
+// import request from 'supertest';
+// import app from '../app';
 import jwt from 'jsonwebtoken';
 import configService from '../utils/config/config-service';
 
 declare global {
-    var signin: () => string[];
+    var signin: () => string;
 }
 
 jest.mock('../utils/nats/nats.wrapper');
 
 let mongo: any;
 beforeAll(async () => {
-    console.log('Setting up in-memory MongoDB for tests...');
+    console.log('*********Setting up in-memory MongoDB for tests*********');
 
     process.env.JWT_KEY = 'xsdflkjqwe1234';
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // Disable TLS certificate validation for testing
@@ -78,8 +64,8 @@ global.signin = () => {
     const sessionJSON = JSON.stringify(session);
 
     // Take JSON and encode it as base64
-    const base64 = Buffer.from(sessionJSON).toString('base64');
-
+    const BASE64_ENCODED_SESSION = Buffer.from(sessionJSON).toString('base64');
+    //const _cookie = 'session=eyJqd3QiOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKcFpDSTZJalk0TmpReU1tUmtNelF4TW1FeU5XRTJaamc0WXpRek5TSXNJbVZ0WVdsc0lqb2lkR1Z6ZEVCMFpYTjBMbU52YlNJc0ltbGhkQ0k2TVRjMU1UTTVNams0T1gwLnFzX3loOXMtMkdmRDJiRHBlVkgteVZ3SXczVGRDV3JVc2dZWEw3QnRoQmsifQ==; path=/; samesite=strict; httponly'
     // return a string thats the cookie with the encoded data
-    return [`express:sess=${base64}`];
+    return `session=${BASE64_ENCODED_SESSION}; path=/; samesite=strict; httponly`;
 };

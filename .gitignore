@@ -1,49 +1,49 @@
-auth/node_modules
-tickets/node_modules
+apps/auth/node_modules
+apps/tickets/node_modules
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-client/node_modules
-client/.pnp
-client/.pnp.*
-client/.yarn/*
-client/!.yarn/patches
-client/!.yarn/plugins
-client/!.yarn/releases
-client/!.yarn/versions
+apps/client/node_modules
+apps/client/.pnp
+apps/client/.pnp.*
+apps/client/.yarn/*
+apps/client/!.yarn/patches
+apps/client/!.yarn/plugins
+apps/client/!.yarn/releases
+apps/client/!.yarn/versions
 
 # testing
-client/coverage
+apps/client/coverage
 
 # next.js
-client/.next/
-client/out/
+apps/client/.next/
+apps/client/out/
 
 # production
-client//build
+apps/client/build
 
 # misc
-client/.DS_Store
-client/*.pem
+apps/client/.DS_Store
+apps/client/*.pem
 
 # debug
-client/npm-debug.log*
-client/yarn-debug.log*
-client/yarn-error.log*
-client/.pnpm-debug.log*
+apps/client/npm-debug.log*
+apps/client/yarn-debug.log*
+apps/client/yarn-error.log*
+apps/client/.pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-client/.env*
+apps/client/.env*
 
 # vercel
-client/.vercel
+apps/client/.vercel
 
 # typescript
-client/*.tsbuildinfo
-client/next-env.d.ts
+apps/client/*.tsbuildinfo
+apps/client/next-env.d.ts
 
-infra/terraform/.terraform
-infra/terraform/.terraform.lock.hcl
-infra/terraform/*.tfstate*
-infra/terraform/*.tfvars
+infra/.terraform
+infra/.terraform.lock.hcl
+infra/*.tfstate*
+infra/*.tfvars

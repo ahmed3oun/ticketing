@@ -3,6 +3,8 @@ import app from '../../app';
 
 it('responds with details about the current user', async () => {
     const cookie = await global.signin();
+    console.log(`************* ====== Cookie: ${cookie}`); // Debugging line to check the cookie value
+
 
     const response = await request(app)
         .get('/api/v1/user/get-current-user')

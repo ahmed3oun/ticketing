@@ -1,5 +1,5 @@
 
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import ErrorHandler from "../utils/errors/error-handler";
 import BaseApiController from "./base-api.controller";
 import TicketsService from '../services/tickets.service';
@@ -26,10 +26,10 @@ class TicketsApiController extends BaseApiController {
             const currentUser = this.getCurrentUser();
             const body = this.getBody() as ITicket
 
-            if (validator.isEmpty(body.title) || validator.isFloat(body.price.toString(), {
-                gt: 0
-            })) {
-                throw new ErrorHandler("Ticket must have a title and its price must be greater than 0", 400);
+            if (validator.isEmpty(body.title ?? '')) {
+                throw new ErrorHandler("Ticket must have a title", 400);
+            } else if (!validator.isFloat(body.price?.toString() ?? '', { gt: 0 })) {
+                throw new ErrorHandler("Ticket price must be greater than 0", 400);
             }
 
             const newTicket = await this.ticketsService.create({
@@ -74,24 +74,24 @@ class TicketsApiController extends BaseApiController {
             const body = this.getBody() as ITicket
             const ticketId = this.getParams().id;
 
-            if (validator.isEmpty(body.title) || validator.isFloat(body.price.toString(), {
-                gt: 0
-            })) {
-                throw new ErrorHandler("Ticket must have a title and its price must be greater than 0", 400);
+            if (validator.isEmpty(body.title ?? '')) {
+                throw new ErrorHandler("Ticket must have a title", 400);
+            } else if (!validator.isFloat(body.price?.toString() ?? '', { gt: 0 })) {
+                throw new ErrorHandler("Ticket price must be greater than 0", 400);
             }
 
-            if (!validator.isMongoId(ticketId)) {
+            /* if (!validator.isMongoId(ticketId)) {
                 throw new ErrorHandler("Ticket must have a valid id", 400);
-            }
+            } */
+           const ticket = await this.ticketsService.getById(ticketId);
+           if (ticket.orderId) {
+               throw new ErrorHandler("Cannot update an ordered ticket", 400);
+           }
 
-            if (currentUser!.id !== body.userId) {
+            if (currentUser!.id !== ticket.userId) {
                 throw new ErrorHandler("You are not allowed to update this ticket", 403);
             }
 
-            const ticket = await this.ticketsService.getById(ticketId);
-            if (ticket.orderId) {
-                throw new ErrorHandler("Cannot update an ordered ticket", 400);
-            }
 
             const updatedTicket = await this.ticketsService.update(ticketId, body);
 

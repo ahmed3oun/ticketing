@@ -1,35 +1,35 @@
-locals {
-  env = terraform.workspace
+# locals {
+#   env = terraform.workspace
 
-  public_sg_rules_ingress = {
-    for id, rule in csvdecode(file("./sg_rules.csv")) :
-    id => {
-      protocol    = rule["protocol"]
-      from_port   = tonumber(split("-", rule["port_range"])[0])
-      to_port     = length(split("-", rule["port_range"])) > 1 ? tonumber(split("-", rule["port_range"])[1]) : tonumber(split("-", rule["port_range"])[0])
-      cidr_blocks = rule["dst_cidr"]
-      rule_type   = rule["rule_type"]
-      dst_sg      = rule["dst_sg"]
-    }
-    if rule["sg_name"] == "public_sg" && rule["rule_type"] == "ingress"
-  }
+#   public_sg_rules_ingress = {
+#     for id, rule in csvdecode(file("./sg_rules.csv")) :
+#     id => {
+#       protocol    = rule["protocol"]
+#       from_port   = tonumber(split("-", rule["port_range"])[0])
+#       to_port     = length(split("-", rule["port_range"])) > 1 ? tonumber(split("-", rule["port_range"])[1]) : tonumber(split("-", rule["port_range"])[0])
+#       cidr_blocks = rule["dst_cidr"]
+#       rule_type   = rule["rule_type"]
+#       dst_sg      = rule["dst_sg"]
+#     }
+#     if rule["sg_name"] == "public_sg" && rule["rule_type"] == "ingress"
+#   }
 
-  private_sg_rules_ingress = {
-    for id, rule in csvdecode(file("./sg_rules.csv")) :
-    id => {
-      protocol    = rule["protocol"]
-      from_port   = tonumber(split("-", rule["port_range"])[0])
-      to_port     = length(split("-", rule["port_range"])) > 1 ? tonumber(split("-", rule["port_range"])[1]) : tonumber(split("-", rule["port_range"])[0])
-      cidr_blocks = rule["dst_cidr"]
-      rule_type   = rule["rule_type"]
-      dst_sg      = rule["dst_sg"]
-    }
-    if rule["sg_name"] == "private_sg" && rule["rule_type"] == "ingress"
-  }
-}
+#   private_sg_rules_ingress = {
+#     for id, rule in csvdecode(file("./sg_rules.csv")) :
+#     id => {
+#       protocol    = rule["protocol"]
+#       from_port   = tonumber(split("-", rule["port_range"])[0])
+#       to_port     = length(split("-", rule["port_range"])) > 1 ? tonumber(split("-", rule["port_range"])[1]) : tonumber(split("-", rule["port_range"])[0])
+#       cidr_blocks = rule["dst_cidr"]
+#       rule_type   = rule["rule_type"]
+#       dst_sg      = rule["dst_sg"]
+#     }
+#     if rule["sg_name"] == "private_sg" && rule["rule_type"] == "ingress"
+#   }
+# }
 
 module "network" {
-  source = "./network"
+  source = "./modules/network"
 
   vpc_name   = var.vpc_name
   cidr_block = var.cidr_block
@@ -43,6 +43,15 @@ module "network" {
   public_sg_rules_ingress  = local.public_sg_rules_ingress
   private_sg_rules_ingress = local.private_sg_rules_ingress
 
+}
+
+module "iam" {
+  source = "./modules/iam"
+
+  eks_cluster_role_name = var.eks_cluster_role_name
+  eks_node_role_name    = var.eks_node_role_name
+  env                   = local.env
+  depends_on            = [module.network]
 }
 
 

@@ -60,17 +60,17 @@ variable "public_route_table_name" {
 variable "env" {
   description = "Environment name (e.g., dev, staging, prod)"
   type        = string
-  validation {
-    condition     = can(regex("^(dev|staging|prod)$", var.env))
-    error_message = "Environment must be one of: dev, staging, prod."
-  }
-  default = "dev"
+  # validation {
+  #   condition     = can(regex("^(dev|staging|prod)$", var.env))
+  #   error_message = "Environment must be one of: dev, staging, prod."
+  # }
+  # default = "dev"
 }
 
 variable "public_sg_rules_ingress" {
   description = "Ingress rules for the public security group"
   type = map(object({
-    description = string # e.g., "Allow HTTP traffic"
+    # description = string # e.g., "Allow HTTP traffic"
     from_port   = number # e.g., 80 for HTTP, 443 for HTTPS
     to_port     = number # e.g., 80 for HTTP, 443 for HTTPS
     protocol    = string # e.g., "tcp", "udp", "icmp"
@@ -83,7 +83,7 @@ variable "public_sg_rules_ingress" {
 variable "private_sg_rules_ingress" {
   description = "Ingress rules for the private security group"
   type = map(object({
-    description = string # e.g., "Allow traffic from public SG"
+    # description = string # e.g., "Allow traffic from public SG"
     from_port   = number # e.g., 80 for HTTP, 443 for HTTPS
     to_port     = number # e.g., 80 for HTTP, 443 for HTTPS
     protocol    = string # e.g., "tcp", "udp", "icmp"

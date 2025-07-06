@@ -11,8 +11,8 @@ resource "aws_vpc" "main2" {
 resource "aws_subnet" "public" {
   count                   = length(var.public_subnets)
   vpc_id                  = aws_vpc.main2.id
-  cidr_block              = var.cidr_block[count.index].cidr_block
-  availability_zone       = var.cidr_block[count.index].availability_zone
+  cidr_block              = var.public_subnets[count.index].cidr_block
+  availability_zone       = var.public_subnets[count.index].availability_zone
   map_public_ip_on_launch = true # Enable public IP assignment
 
   tags = {
@@ -143,7 +143,7 @@ resource "aws_security_group_rule" "public_sg_rule" {
   for_each = var.public_sg_rules_ingress
 
   security_group_id = aws_security_group.public_sg.id
-  description       = each.value.description
+  # description       = each.value.description
   type              = each.value.rule_type
   from_port         = each.value.from_port
   to_port           = each.value.to_port
@@ -156,7 +156,7 @@ resource "aws_security_group_rule" "public_sg_rule" {
 resource "aws_security_group_rule" "private_sg_rule" {
   for_each                 = var.private_sg_rules_ingress
   security_group_id        = aws_security_group.private_sg.id
-  description              = each.value.description
+  # description              = each.value.description
   type                     = each.value.rule_type
   from_port                = each.value.from_port
   to_port                  = each.value.to_port

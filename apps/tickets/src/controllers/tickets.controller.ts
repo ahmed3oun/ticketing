@@ -1,5 +1,5 @@
 
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import ErrorHandler from "../utils/errors/error-handler";
 import BaseApiController from "./base-api.controller";
 import TicketsService from '../services/tickets.service';

@@ -143,25 +143,24 @@ resource "aws_security_group_rule" "public_sg_rule" {
   for_each = var.public_sg_rules_ingress
 
   security_group_id = aws_security_group.public_sg.id
-  # description       = each.value.description
   type              = each.value.rule_type
   from_port         = each.value.from_port
   to_port           = each.value.to_port
   protocol          = each.value.protocol
-  cidr_blocks       = [each.value.cidr_blocks] != "" ? [each.value.cidr_blocks] : null
-  depends_on        = [aws_security_group.public_sg]
+  cidr_blocks       = each.value.cidr_blocks != "" ? [each.value.cidr_blocks] : null
+  source_security_group_id = each.value.dst_sg != "" ? aws_security_group.private_sg.id : null
+  depends_on        = [aws_security_group.public_sg, aws_security_group.private_sg]
 }
 
 # 14.create private security group rules
 resource "aws_security_group_rule" "private_sg_rule" {
   for_each                 = var.private_sg_rules_ingress
   security_group_id        = aws_security_group.private_sg.id
-  # description              = each.value.description
   type                     = each.value.rule_type
   from_port                = each.value.from_port
   to_port                  = each.value.to_port
   protocol                 = each.value.protocol
-  cidr_blocks              = [each.value.cidr_blocks] != "" ? [each.value.cidr_blocks] : null
+  cidr_blocks              = each.value.cidr_blocks != "" ? [each.value.cidr_blocks] : null
   source_security_group_id = each.value.dst_sg != "" ? aws_security_group.public_sg.id : null
   depends_on               = [aws_security_group.private_sg]
 }

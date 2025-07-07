@@ -69,7 +69,7 @@ variable "env" {
   #   condition     = can(regex("^(dev|staging|prod)$", var.env))
   #   error_message = "Environment must be one of: dev, staging, prod."
   # }
-  # default = "dev"
+  default = "dev"
 }
 
 

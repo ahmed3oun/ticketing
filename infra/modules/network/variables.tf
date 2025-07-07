@@ -11,10 +11,10 @@ variable "vpc_name" {
 variable "cidr_block" {
   description = "CIDR block for the VPC"
   type        = string
-  validation {
-    condition     = can(regex("^(\\d{1,3}\\.){3}\\d{1,3}/\\d{1,2}$", var.cidr_block))
-    error_message = "CIDR block must be in the format x.x.x.x/x."
-  }
+  # validation {
+  #   condition     = can(regex("^(\\d{1,3}\\.){3}\\d{1,3}/\\d{1,2}$", var.cidr_block))
+  #   error_message = "CIDR block must be in the format x.x.x.x/x."
+  # }
 }
 
 variable "public_subnets" {
@@ -64,13 +64,12 @@ variable "env" {
   #   condition     = can(regex("^(dev|staging|prod)$", var.env))
   #   error_message = "Environment must be one of: dev, staging, prod."
   # }
-  # default = "dev"
+  default = "dev"
 }
 
 variable "public_sg_rules_ingress" {
   description = "Ingress rules for the public security group"
   type = map(object({
-    # description = string # e.g., "Allow HTTP traffic"
     from_port   = number # e.g., 80 for HTTP, 443 for HTTPS
     to_port     = number # e.g., 80 for HTTP, 443 for HTTPS
     protocol    = string # e.g., "tcp", "udp", "icmp"
@@ -83,7 +82,6 @@ variable "public_sg_rules_ingress" {
 variable "private_sg_rules_ingress" {
   description = "Ingress rules for the private security group"
   type = map(object({
-    # description = string # e.g., "Allow traffic from public SG"
     from_port   = number # e.g., 80 for HTTP, 443 for HTTPS
     to_port     = number # e.g., 80 for HTTP, 443 for HTTPS
     protocol    = string # e.g., "tcp", "udp", "icmp"

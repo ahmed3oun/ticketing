@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
+import Order from './order.model';
+import { OrderStatus } from '../utils/nats/types/order-status.enum';
 
 interface ITicket {
     title: string;
@@ -14,6 +16,7 @@ interface TicketDoc extends mongoose.Document<ITicket> {
     userId: string;
     version: number;
     orderId?: string;
+    isReserved(): Promise<boolean>; // Method to check if the ticket is reserved
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -60,6 +63,20 @@ ticketSchema.plugin(updateIfCurrentPlugin);
 
 ticketSchema.statics.build = (attrs: ITicket) => {
     return new Ticket(attrs);
+}
+
+ticketSchema.statics.isReserved = async function (): Promise<boolean> {
+    const existingOrder = await Order.findOne({
+        ticket: this as any, // 'this' refers to the Ticket model
+        status: {
+            $in: [
+                OrderStatus.Created,
+                OrderStatus.AwaitingPayment,
+                OrderStatus.Complete
+            ] // Check for orders that are not completed or cancelled
+        }
+    });
+    return !!existingOrder; // Return true if an order exists, false otherwise
 }
 
 const Ticket = mongoose.model<TicketDoc, TicketModel>('Ticket', ticketSchema);

@@ -1,7 +1,7 @@
 import istAuthenticated from "../middlewares/is-authenticated.middleware";
 import TicketsApiController from "../controllers/tickets.controller";
 import { Request, Response, Router } from "express";
-import OrdersApiController from "@/controllers/orders.controller";
+import OrdersApiController from "../controllers/orders.controller";
 
 const apiRouter: Router = Router();
 

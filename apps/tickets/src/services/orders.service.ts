@@ -1,5 +1,6 @@
 import ErrorHandler from "../utils/errors/error-handler";
 import Order, { IOrder, OrderDoc } from "../models/order.model";
+import { OrderStatus } from "../utils/nats/types/order-status.enum";
 
 export default class OrdersService {
 
@@ -35,8 +36,10 @@ export default class OrdersService {
      * @description This method retrieves all orders.
      * @returns The found orders documents.
      */
-    getAll() {
-        const orders = Order.find().populate('ticket'); // Populate the ticket field to get ticket details
+    getAll(userId: string) {
+        const orders = Order.find({
+            userId
+        }).populate('ticket'); // Populate the ticket field to get ticket details
         if (!orders) {
             throw new ErrorHandler("No tickets found", 404);
         }
@@ -71,7 +74,7 @@ export default class OrdersService {
         if (!order) {
             throw new ErrorHandler(`Order with ID ${orderId} not found`, 404);
         }
-        order.set({ status: 'cancelled' }); // Set the status to cancelled instead of deleting
+        order.set({ status: OrderStatus.Cancelled }); // Set the status to cancelled instead of deleting
         await order.save();
         return order;
     }

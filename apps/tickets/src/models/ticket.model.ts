@@ -1,10 +1,7 @@
 import mongoose from 'mongoose';
 import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
-<<<<<<< HEAD
 import Order from './order.model';
 import { OrderStatus } from '../utils/nats/types/order-status.enum';
-=======
->>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
 
 interface ITicket {
     title: string;
@@ -19,10 +16,7 @@ interface TicketDoc extends mongoose.Document<ITicket> {
     userId: string;
     version: number;
     orderId?: string;
-<<<<<<< HEAD
     isReserved(): Promise<boolean>; // Method to check if the ticket is reserved
-=======
->>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -71,7 +65,6 @@ ticketSchema.statics.build = (attrs: ITicket) => {
     return new Ticket(attrs);
 }
 
-<<<<<<< HEAD
 ticketSchema.methods.isReserved = async function (): Promise<boolean> {
     const existingOrder = await Order.findOne({
         ticket: this as any, // 'this' refers to the Ticket model
@@ -86,8 +79,6 @@ ticketSchema.methods.isReserved = async function (): Promise<boolean> {
     return !!existingOrder; // Return true if an order exists, false otherwise
 }
 
-=======
->>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
 const Ticket = mongoose.model<TicketDoc, TicketModel>('Ticket', ticketSchema);
 
 export default Ticket;

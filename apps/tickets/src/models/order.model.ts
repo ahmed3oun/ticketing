@@ -35,10 +35,10 @@ const orderSchema = new mongoose.Schema(
             enum: Object.values(OrderStatus), // Ensure status is one of the OrderStatus enum values
             default: OrderStatus.Created, // Default status when creating an order
         },
-        expirsAt: {
+        expiresAt: {
             type: mongoose.Schema.Types.Date,
         },
-        Ticket: {
+        ticket: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Ticket',
             required: true, // Ensure that a ticket is associated with the order
@@ -58,7 +58,12 @@ orderSchema.set('versionKey', 'version');
 orderSchema.plugin(updateIfCurrentPlugin); // Plugin to handle optimistic concurrency control
 
 orderSchema.statics.build = (attr: IOrder) => {
-    return new Order(attr);
+    return new Order({
+        ticket: attr.ticket,
+        userId: attr.userId,
+        expiresAt: attr.expiresAt,
+        status: attr.status
+    });
 }
 
 const Order = mongoose.model<OrderDoc, OrderModel>('Order', orderSchema);

@@ -65,7 +65,7 @@ ticketSchema.statics.build = (attrs: ITicket) => {
     return new Ticket(attrs);
 }
 
-ticketSchema.statics.isReserved = async function (): Promise<boolean> {
+ticketSchema.methods.isReserved = async function (): Promise<boolean> {
     const existingOrder = await Order.findOne({
         ticket: this as any, // 'this' refers to the Ticket model
         status: {

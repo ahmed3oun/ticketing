@@ -8,7 +8,7 @@ class NatsWrapper {
 
 
 
-    public get client(): Stan | null {
+    public get client(): Stan {
         if (!this._client || !this.isConnected) {
             throw new Error('Cannot access NATS client before connecting')
         }

@@ -6,10 +6,10 @@ import OrdersService from '../services/orders.service';
 import { IOrder } from "../models/order.model";
 import * as validator from "validator";
 import TicketsService from '../services/tickets.service';
-import { OrderStatus } from "@/utils/nats/types/order-status.enum";
-import { OrderCreatedPublisher } from "@/events/publishers/order-created.publisher";
-import { natsWrapper } from "@/utils/nats/nats.wrapper";
-import { OrderCancelledPublisher } from "@/events/publishers/order-cancelled.publisher";
+import { OrderStatus } from "../utils/nats/types/order-status.enum";
+import { OrderCreatedPublisher } from "../events/publishers/order-created.publisher";
+import { natsWrapper } from "../utils/nats/nats.wrapper";
+import { OrderCancelledPublisher } from "../events/publishers/order-cancelled.publisher";
 
 
 
@@ -38,7 +38,8 @@ class OrdersApiController extends BaseApiController {
             if (!ticket) {
                 throw new ErrorHandler("Ticket not found", 404);
             }
-            if (await ticket.isReserved()) {
+            const isReserved = await ticket.isReserved();
+            if (isReserved) {
                 throw new ErrorHandler("Ticket is already reserved", 400);
             }
             const expiresAt = new Date();
@@ -50,7 +51,7 @@ class OrdersApiController extends BaseApiController {
                 status: OrderStatus.Created
             });
 
-            new OrderCreatedPublisher(natsWrapper.client!).publish({
+            new OrderCreatedPublisher(natsWrapper.client).publish({
                 id: order.id,
                 userId: order.userId,
                 expiresAt: order.expiresAt.toISOString(),

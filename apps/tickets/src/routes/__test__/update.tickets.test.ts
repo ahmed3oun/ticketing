@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../../app';
 import mongoose from 'mongoose';
-import Ticket from '@/models/ticket.model';
+import Ticket from '../../models/ticket.model';
 
 
 it('returns a 404 if the provided id does not belong to a ticket', async () => {

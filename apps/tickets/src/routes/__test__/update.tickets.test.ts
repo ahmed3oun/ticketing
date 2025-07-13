@@ -1,11 +1,7 @@
 import request from 'supertest';
 import app from '../../app';
 import mongoose from 'mongoose';
-<<<<<<< HEAD
 import Ticket from '../../models/ticket.model';
-=======
-import Ticket from '@/models/ticket.model';
->>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
 
 
 it('returns a 404 if the provided id does not belong to a ticket', async () => {

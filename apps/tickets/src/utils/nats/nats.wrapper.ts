@@ -8,11 +8,7 @@ class NatsWrapper {
 
 
 
-<<<<<<< HEAD
     public get client(): Stan {
-=======
-    public get client(): Stan | null {
->>>>>>> 9db7e17 (updtate project arch and complete tickets feature with its unit tests: tickets ms and upd infra)
         if (!this._client || !this.isConnected) {
             throw new Error('Cannot access NATS client before connecting')
         }

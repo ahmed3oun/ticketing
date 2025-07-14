@@ -72,7 +72,11 @@ class OrdersApiController extends BaseApiController {
     async find() {
         try {
             const currUser = this.getCurrentUser()
-            const orders = this.ordersService.getAll(currUser!.id)
+            const orders = await this.ordersService.getAll(currUser!.id)
+            console.log({
+                orders
+            });
+
             return this.sendResponse(orders, 200);
         } catch (error: any) {
             return this.sendError(error);
@@ -92,7 +96,7 @@ class OrdersApiController extends BaseApiController {
             return this.sendError(error);
         }
     }
-    // /tickets/update/:id
+    // /orders/update/:id
     async update() {
         try {
             this.sendError(new ErrorHandler("This endpoint is not implemented yet", 501));
@@ -100,7 +104,7 @@ class OrdersApiController extends BaseApiController {
             return this.sendError(error);
         }
     }
-    // /tickets/delete/:id
+    // /orders/delete/:id
     async delete() {
         try {
             const currUser = this.getCurrentUser();

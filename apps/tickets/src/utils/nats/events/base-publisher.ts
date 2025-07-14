@@ -18,10 +18,6 @@ export default abstract class Publisher<T extends IEvent> {
     async publish(data: T['data']): Promise<void> {
         return new Promise((resolve, reject) => {
             const stringifiedData = this.stringifyData(data);
-            console.log({
-                stringifiedData,
-                client: this.client
-            });
 
             this.client.publish(this.subject, stringifiedData, (err) => {
                 if (err) {

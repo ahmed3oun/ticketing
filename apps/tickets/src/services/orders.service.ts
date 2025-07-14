@@ -36,10 +36,14 @@ export default class OrdersService {
      * @description This method retrieves all orders.
      * @returns The found orders documents.
      */
-    getAll(userId: string) {
-        const orders = Order.find({
+    async getAll(userId: string) {
+        const orders = await Order.find({
             userId
         }).populate('ticket'); // Populate the ticket field to get ticket details
+        console.log({
+            orders
+        });
+
         if (!orders) {
             throw new ErrorHandler("No tickets found", 404);
         }

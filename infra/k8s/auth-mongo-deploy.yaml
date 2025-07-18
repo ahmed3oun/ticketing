@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -39,3 +40,46 @@ spec:
   # This is useful for applications that need to connect to MongoDB without relying on a specific IP address.
 # This configuration is suitable for a development or testing environment.
 # In a production environment, you might want to consider additional configurations such as persistent storage,
+=======
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: auth-mongo-deploy
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: auth-mongo
+#   template:
+#     metadata:
+#       labels:
+#         app: auth-mongo
+#     spec:
+#       containers:
+#         - name: auth-mongo
+#           image: mongo
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: auth-mongo-srv
+# spec:
+#   selector:
+#     app: auth-mongo
+#   ports:
+#     - name: db
+#       protocol: TCP
+#       port: 27017
+#       targetPort: 27017
+#   type: ClusterIP
+#   sessionAffinity: None # This service is set to ClusterIP, which means it will be accessible within the cluster.
+#   # security configurations, and resource limits.
+#   # The sessionAffinity is set to None, meaning that requests to this service will not be sticky to a specific pod.
+#   # This is useful for load balancing and ensuring that requests can be distributed across multiple pods if needed.
+#   clusterIP: None # This allows the service to be accessed by its name without a specific IP.
+#   # Note: Setting clusterIP to None makes this a headless service, which is useful for stateful applications.
+#   # If you want to access the MongoDB service by its name, you can use 'auth-mongo-srv' in your application.
+#   # This is useful for applications that need to connect to MongoDB without relying on a specific IP address.
+# # This configuration is suitable for a development or testing environment.
+# # In a production environment, you might want to consider additional configurations such as persistent storage,
+>>>>>>> 620ead8 (restart repo to fix issue...)

@@ -1,0 +1,50 @@
+apps/auth/node_modules
+apps/tickets/node_modules
+apps/expiration/node_modules
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+apps/client/node_modules
+apps/client/.pnp
+apps/client/.pnp.*
+apps/client/.yarn/*
+apps/client/!.yarn/patches
+apps/client/!.yarn/plugins
+apps/client/!.yarn/releases
+apps/client/!.yarn/versions
+
+# testing
+apps/client/coverage
+
+# next.js
+apps/client/.next/
+apps/client/out/
+
+# production
+apps/client/build
+
+# misc
+apps/client/.DS_Store
+apps/client/*.pem
+
+# debug
+apps/client/npm-debug.log*
+apps/client/yarn-debug.log*
+apps/client/yarn-error.log*
+apps/client/.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+apps/client/.env*
+
+# vercel
+apps/client/.vercel
+
+# typescript
+apps/client/*.tsbuildinfo
+apps/client/next-env.d.ts
+
+infra/.terraform
+infra/.terraform.lock.hcl
+infra/*.tfstate*
+infra/*.tfvars

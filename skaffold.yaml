@@ -17,8 +17,6 @@ build:
             dest: '.'
           - src: 'tsconfig.json'
             dest: '.' # Sync the tsconfig.json file
-<<<<<<< HEAD
-=======
     - image: ahmedoun96/expiration
       context: apps/expiration # Path to the Dockerfile for the auth service
       docker:
@@ -32,7 +30,6 @@ build:
             dest: '.'
           - src: 'tsconfig.json'
             dest: '.' # Sync the tsconfig.json file
->>>>>>> 620ead8 (restart repo to fix issue...)
     - image: ahmedoun96/tickets
       context: apps/tickets # Path to the Dockerfile for the auth service
       docker:

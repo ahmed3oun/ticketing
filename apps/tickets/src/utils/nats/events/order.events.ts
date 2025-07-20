@@ -27,3 +27,10 @@ export interface OrderCancelledEvent {
         };
     }
 }
+
+export interface ExpirationCompleteEvent {
+    subject: Subjects.ExpirationComplete;
+    data: {
+        orderId: string;
+    };
+}

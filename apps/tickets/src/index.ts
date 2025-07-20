@@ -1,4 +1,5 @@
 import app from "./app"
+import { ExpirationCompleteListener } from "./events/listeners/expiration-complete.listener";
 // import { OrderCancelledListener } from "./events/listeners/order-cancelled.listener";
 // import { OrderCreatedListener } from "./events/listeners/order-created.listener";
 import configService from "./utils/config/config-service";
@@ -29,6 +30,8 @@ const start = async () => {
 
     // new OrderCreatedListener(natsWrapper.client!).listen();
     // new OrderCancelledListener(natsWrapper.client!).listen();
+    new ExpirationCompleteListener(natsWrapper.client).listen();
+    // new PaymentCreatedListener(natsWrapper.client).listen();
 
     // Connect to MongoDB
     await connectDatabase(MONGO_URI);

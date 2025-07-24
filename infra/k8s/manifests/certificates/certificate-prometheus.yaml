@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: prometheus-ticketing-tls
+  namespace: monitoring # Replace with the namespace where your application is deployed
+spec:
+  secretName: prometheus-ticketing-tls-secret  # The secret where the TLS certificate will be stored
+  issuerRef:
+    name: letsencrypt-prod # Reference to the ClusterIssuer
+    kind: ClusterIssuer
+  commonName: prometheus.ticketing.app.fr
+  dnsNames:
+    - prometheus.ticketing.app.fr
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx # The ingress class used by the NGINX Ingress Controller
+        domain: prometheus.ticketing.app.fr # The domain for which the certificate is requested

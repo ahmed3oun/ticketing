@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: grafana-ticketing-tls
+  namespace: monitoring # Replace with the namespace where your application is deployed
+spec:
+  secretName: grafana-ticketing-tls-secret # The secret where the TLS certificate will be stored
+  issuerRef:
+    name: letsencrypt-prod # Reference to the ClusterIssuer
+    kind: ClusterIssuer
+  commonName: grafana.ticketing.app.fr
+  dnsNames:
+    - grafana.ticketing.app.fr
+  acme:
+    config:
+      - http01:
+          ingressClass: nginx # The ingress class used by the NGINX Ingress Controller
+        domain: grafana.ticketing.app.fr # The domain for which the certificate is requested

@@ -2,6 +2,7 @@ import istAuthenticated from "../middlewares/is-authenticated.middleware";
 import TicketsApiController from "../controllers/tickets.controller";
 import { Request, Response, Router } from "express";
 import OrdersApiController from "../controllers/orders.controller";
+import PaymentsApiController from "../controllers/payment.controller";
 
 const apiRouter: Router = Router();
 
@@ -59,12 +60,18 @@ apiRouter.delete(
     async (req: Request, res: Response) => { await new OrdersApiController(req, res).delete() }
 );
 
-// apiRouter.all('/*', (req: Request, res: Response) => {
-//     res.status(404).send({
-//         status: false,
-//         message: 'API Not found',
-//     })
-// });
+// Define the API routes for the payments service
+apiRouter.post(
+    '/payments/create',
+    istAuthenticated,
+    async (req: Request, res: Response) => { await new PaymentsApiController(req, res).create() }
+);
 
+apiRouter.get(
+    '/payments/find',
+    istAuthenticated,
+    async (req: Request, res: Response) => { await new PaymentsApiController(req, res).find() }
+);
+
+// This file defines the API routes for the tickets micro-service.
 export default apiRouter;
-// This file defines the API routes for the tickets service.

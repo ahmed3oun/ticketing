@@ -68,6 +68,8 @@ orderSchema.statics.build = (attr: IOrder) => {
 
 const Order = mongoose.model<OrderDoc, OrderModel>('Order', orderSchema);
 
+Order.collection.createIndex({ userId: 1 });
+
 export { OrderDoc, IOrder, OrderModel };
 export default Order;
 

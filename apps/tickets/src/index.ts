@@ -15,7 +15,7 @@ const start = async () => {
     const NATS_CLUSTER_ID = configService.getOrElseThrow('NATS_CLUSTER_ID');
     const MONGO_URI = configService.getOrElseThrow('MONGO_URI');
     const JWT_KEY = configService.getOrElseThrow('JWT_KEY');
-    //const JWT_EXPIRES_TIME = configService.getOrElseThrow('JWT_EXPIRES_TIME');
+    const STRIPE_KEY = configService.getOrElseThrow('STRIPE_KEY');
 
     // Connect to NATS
     await natsWrapper.connect(NATS_CLUSTER_ID, NATS_CLIENT_ID, NATS_URL);

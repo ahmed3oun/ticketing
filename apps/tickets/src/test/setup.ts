@@ -1,15 +1,15 @@
+
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
-// import request from 'supertest';
-// import app from '../app';
 import jwt from 'jsonwebtoken';
 import configService from '../utils/config/config-service';
 
 declare global {
-    var signin: () => string;
+    var signin: (userId?: string) => string;
 }
 
 jest.mock('../utils/nats/nats.wrapper');
+jest.mock('../utils/stripe/stripe.wrapper')
 
 let mongo: any;
 beforeAll(async () => {
@@ -19,7 +19,11 @@ beforeAll(async () => {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // Disable TLS certificate validation for testing
 
     configService.loadConfig();
-    console.log('Config loaded:', configService.get('JWT_KEY'), configService.get('NODE_TLS_REJECT_UNAUTHORIZED'));
+    console.log('Config loaded:',
+        configService.get('JWT_KEY'),
+        configService.get('NODE_TLS_REJECT_UNAUTHORIZED'),
+        configService.get('STRIPE_KEY')
+    );
 
     mongo = await MongoMemoryServer.create({
         instance: {
@@ -47,10 +51,10 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-global.signin = () => {
+global.signin = (userId?: string) => {
     // Build a JWT payload.  { id, email }
     const payload = {
-        id: new mongoose.Types.ObjectId().toHexString(),
+        id: userId || new mongoose.Types.ObjectId().toHexString(),
         email: 'test@test.com',
     };
 

@@ -1,23 +1,19 @@
-
 import { Request, Response } from "express";
 import ErrorHandler from "../utils/errors/error-handler";
 import BaseApiController from "./base-api.controller";
 import { OrderStatus } from "../utils/nats/types/order-status.enum";
-import Payment, { IPayment } from "../models/payment.model";
+import Payment from "../models/payment.model";
 import OrdersService from '../services/orders.service';
-// import { IOrder } from "../models/order.model";
 import * as validator from "validator";
-import stripe from "../utils/stripe/";
-// import { OrderStatus } from "../utils/nats/types/order-status.enum";
-// import { OrderCreatedPublisher } from "../events/publishers/order-created.publisher";
-// import { natsWrapper } from "../utils/nats/nats.wrapper";
-// import { OrderCancelledPublisher } from "../events/publishers/order-cancelled.publisher";
+import stripe from "../utils/stripe/stripe.wrapper";
+import PaymentsService from "../services/payments.service";
 
 
 
 class PaymentsApiController extends BaseApiController {
 
     private readonly ordersService: OrdersService = new OrdersService();
+    private readonly paymentsService: PaymentsService = new PaymentsService();
 
     constructor(
         protected readonly req: Request,
@@ -61,12 +57,10 @@ class PaymentsApiController extends BaseApiController {
                 throw new ErrorHandler("Payment failed", 500);
             }
 
-            const payment = Payment.build({
+            const payment = this.paymentsService.create({
                 orderId: order.id,
-                stripeId: charge.id,
+                stripeId: charge.id
             })
-
-            await payment.save();
 
             this.sendResponse(payment, 201)
 
@@ -74,7 +68,7 @@ class PaymentsApiController extends BaseApiController {
             return this.sendError(error);
         }
     }
-
+    // /payments/find
     async find() {
         try {
             // const currentUser = this.getCurrentUser();

@@ -1,0 +1,37 @@
+grafana:
+  enabled: true
+  adminUser: admin
+  adminPassword: admin
+  ingress:
+    enabled: true
+    pathType: Prefix
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - grafana.ticketing.app.fr
+    path : /
+    tls:
+      - secretName: grafana-ticketing-tls-secret # The secret where the TLS certificate will be stored
+        hosts:
+          - grafana.ticketing.app.fr # Replace with the domain for Grafana
+
+prometheus:
+  enabled: true
+  ingress:
+    enabled: true
+    pathType: Prefix
+    ingressClassName: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+      kubernetes.io/tls-acme: "true"
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - prometheus.ticketing.app.fr
+    path : /
+    tls:
+      - secretName: prometheus-ticketing-tls-secret # The secret where the TLS certificate will be stored
+        hosts:
+          - prometheus.ticketing.app.fr  # Replace with the domain for Prometheus

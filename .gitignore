@@ -47,4 +47,4 @@ apps/client/next-env.d.ts
 infra/.terraform
 infra/.terraform.lock.hcl
 infra/*.tfstate*
-infra/*.tfvars
+#infra/*.tfvars

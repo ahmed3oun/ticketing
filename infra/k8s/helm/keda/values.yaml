@@ -1,0 +1,25 @@
+
+# enable metrics server for KEDA
+# This is required for KEDA to function properly
+# and to allow it to scale based on metrics.
+metricsServer:
+  enabled: true
+# enable Prometheus monitoring for KEDA
+# This allows KEDA to expose its metrics to Prometheus.
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+# operator configuration for KEDA
+operator:
+  logLevel: debug
+  replicas: 2
+
+# Authentication for scalers
+auth:
+  podIdentity:
+    enabled: false
+  serviceAccount:
+    create: true
+    name: "keda-operator"
+

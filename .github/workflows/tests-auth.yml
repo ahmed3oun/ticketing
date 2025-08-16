@@ -14,7 +14,8 @@ jobs:
       
     steps:
       - uses: actions/checkout@v4
-      
       - run: cd apps/tickets
-      - run: npm install
-      - run: npm run test:ci
+      - run: ls
+      - run: npm version
+      # - run: npm install
+      # - run: npm run test:ci

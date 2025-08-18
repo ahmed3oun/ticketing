@@ -1,0 +1,31 @@
+name: Tests & Build tickets MS
+
+on:
+  push:
+    branches: [ "master" ]
+    paths: 
+      - apps/tickets/**
+  pull_request:
+    branches: [ "master" ]
+    paths:
+      - apps/tickets/**
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4 
+      - run: cd apps/tickets && npm install && npm run test:ci
+  
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+        env:
+          DOCKER_LOGIN: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: cd apps/tickets && docker build -t ahmedoun96/tickets .
+      - run: docker push ahmedoun96/tickets

@@ -1,0 +1,23 @@
+name: Build expiration MS
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - apps/expiration/**
+  pull_request:
+    branches: [ "master" ]
+    paths:
+      - apps/expiration/**
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+        env:
+          DOCKER_LOGIN: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      - run: cd apps/expiration && docker build -t ahmedoun96/expiration .
+      - run: docker push ahmedoun96/expiration

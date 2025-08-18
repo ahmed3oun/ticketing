@@ -3,8 +3,8 @@ name: Build expiration MS
 on:
   push:
     branches: [ "master" ]
-    paths:
-      - apps/client/**
+    # paths:
+    #   - apps/client/**
   pull_request:
     branches: [ "master" ]
     paths:

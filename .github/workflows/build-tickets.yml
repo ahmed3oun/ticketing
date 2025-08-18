@@ -3,8 +3,8 @@ name: Tests & Build tickets MS
 on:
   push:
     branches: [ "master" ]
-    paths: 
-      - apps/tickets/**
+    # paths: 
+    #   - apps/tickets/**
   pull_request:
     branches: [ "master" ]
     paths:

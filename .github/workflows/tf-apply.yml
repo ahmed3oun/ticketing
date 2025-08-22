@@ -42,7 +42,7 @@ jobs:
       
       #5 Chech terraform version
       - name: Terraform format check
-        run: terraform fmt -recursive
+        run: cd infra && terraform fmt -recursive
       
       #6 Validate terraform config
       - name: Terraform Validate
@@ -55,11 +55,11 @@ jobs:
 
       #8 Plan Terraform changes
       - name: Terraform Plan
-        run: terraform plan
+        run: cd infra && terraform plan
 
       #9 Apply Terraform chenges
       # - name: Terraform Apply
-      #   run: terraform apply -auto-approve
+      #   run: cd infra && terraform apply -auto-approve
 
 
     

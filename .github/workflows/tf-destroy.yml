@@ -1,4 +1,4 @@
-name: Terraform Apply
+name: Terraform Destroy
 
 on:
   workflow_dispatch:
@@ -14,52 +14,45 @@ on:
 
 jobs:
   terraform:
-    name: 'Terraform Apply'
+    name: 'Terraform destory'
     runs-on: ubuntu-latest
 
     steps:
-      #1 checkout repository
+    # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v4
       
-      #2 set up Terraform
+      # Step 2: Set up Terraform
+    
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: ${{ secrets.TERRAFORM_VERSION }}
       
-      #3 configure AWS credentials
-      - name: Configure AWS credentials
+      # Step 3: Configure AWS credentials
+    
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region:  ${{ secrets.AWS_REGION }}
-      
-      #4 Init Terraform
+          aws-region: ${{ secrets.AWS_REGION }}
+      # Step 4: Initialize Terraform
+    
       - name: Terraform Init
         run: cd infra && terraform init
       
-      #5 Chech terraform version
-      - name: Terraform format check
-        run: cd infra && terraform fmt -recursive
-      
-      #6 Validate terraform config
-      - name: Terraform Validate
-        run: terraform validate
-
-      # step 7  : Select Workspace
+      # step 5  : Select Workspace
       - name: Select Workspace
         run: |
           terraform workspace select ${{ github.event.inputs.workspace }} || terraform workspace new ${{ github.event.inputs.workspace }}
 
-      #8 Plan Terraform changes
-      - name: Terraform Plan
-        run: cd infra && terraform plan
-
-      # 9 Apply Terraform chenges
-      - name: Terraform Apply
-        run: cd infra && terraform apply -auto-approve
-
-
+      # Step 6: Plan Terraform changes
     
+      - name: Terraform Plan Destroy
+        run: cd infra && terraform plan -destroy
+
+      # Step 7: Apply Terraform changes
+    
+      - name: Terraform Destroy
+        run: cd infra && terraform destroy -auto-approve

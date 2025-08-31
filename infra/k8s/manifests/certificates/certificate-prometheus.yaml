@@ -8,11 +8,11 @@ spec:
   issuerRef:
     name: letsencrypt-prod # Reference to the ClusterIssuer
     kind: ClusterIssuer
-  commonName: prometheus.ticketing.app.fr
+  commonName: prometheus.ticketing.cheznouslabas.fr
   dnsNames:
-    - prometheus.ticketing.app.fr
+    - prometheus.ticketing.cheznouslabas.fr
   acme:
     config:
       - http01:
           ingressClass: nginx # The ingress class used by the NGINX Ingress Controller
-        domain: prometheus.ticketing.app.fr # The domain for which the certificate is requested
+        domain: prometheus.ticketing.cheznouslabas.fr # The domain for which the certificate is requested

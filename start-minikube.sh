@@ -20,3 +20,9 @@ minikube status
 
 # Get the list of services to verify the setup
 kubectl get services --all-namespaces
+
+
+# k3d cluster create ticketing-app --servers-memory 6144m -p 8080:80
+# kubectl apply ./infra/k8s/deployments/
+# kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.13.0/deploy/static/provider/kind/deploy.yaml
+

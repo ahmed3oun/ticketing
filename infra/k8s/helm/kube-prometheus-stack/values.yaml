@@ -11,12 +11,12 @@ grafana:
       kubernetes.io/tls-acme: "true"
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-      - grafana.ticketing.app.fr
+      - grafana.ticketing.cheznouslabas.fr
     path : /
     tls:
       - secretName: grafana-ticketing-tls-secret # The secret where the TLS certificate will be stored
         hosts:
-          - grafana.ticketing.app.fr # Replace with the domain for Grafana
+          - grafana.ticketing.cheznouslabas.fr # Replace with the domain for Grafana
 
 prometheus:
   enabled: true
@@ -29,9 +29,9 @@ prometheus:
       kubernetes.io/tls-acme: "true"
       cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-      - prometheus.ticketing.app.fr
+      - prometheus.ticketing.cheznouslabas.fr
     path : /
     tls:
       - secretName: prometheus-ticketing-tls-secret # The secret where the TLS certificate will be stored
         hosts:
-          - prometheus.ticketing.app.fr  # Replace with the domain for Prometheus
+          - prometheus.ticketing.cheznouslabas.fr  # Replace with the domain for Prometheus

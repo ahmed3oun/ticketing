@@ -25,33 +25,33 @@ provider "aws" {
   region = var.aws_region
 }
 
-# data "aws_eks_cluster" "my_cluster" {
-#   name       = var.cluster_name
-#   # depends_on = [module.kubernetes]
-# }
+data "aws_eks_cluster" "my_cluster" {
+  name       = var.cluster_name
+  # depends_on = [module.kubernetes]
+}
 
-# data "aws_eks_cluster_auth" "my_cluster" {
-#   name       = var.cluster_name
-#   # depends_on = [module.kubernetes]
-# }
+data "aws_eks_cluster_auth" "my_cluster" {
+  name       = var.cluster_name
+  # depends_on = [module.kubernetes]
+}
 
-# provider "kubernetes" {
-#   host                   = data.aws_eks_cluster.my_cluster.endpoint
-#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.my_cluster.certificate_authority[0].data)
-#   token                  = data.aws_eks_cluster_auth.my_cluster.token
-# }
+provider "kubernetes" {
+  host                   = data.aws_eks_cluster.my_cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.my_cluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.my_cluster.token
+}
 
-# provider "kubectl" {
-#   host                   = data.aws_eks_cluster.my_cluster.endpoint
-#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.my_cluster.certificate_authority[0].data)
-#   token                  = data.aws_eks_cluster_auth.my_cluster.token
-#    load_config_file       = false
-# }
+provider "kubectl" {
+  host                   = data.aws_eks_cluster.my_cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.my_cluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.my_cluster.token
+   load_config_file       = false
+}
 
-# provider "helm" {
-#   kubernetes {
-#   host                   = data.aws_eks_cluster.my_cluster.endpoint
-#   cluster_ca_certificate = base64decode(data.aws_eks_cluster.my_cluster.certificate_authority[0].data)
-#   token                  = data.aws_eks_cluster_auth.my_cluster.token
-#   }
-# }
+provider "helm" {
+  kubernetes {
+  host                   = data.aws_eks_cluster.my_cluster.endpoint
+  cluster_ca_certificate = base64decode(data.aws_eks_cluster.my_cluster.certificate_authority[0].data)
+  token                  = data.aws_eks_cluster_auth.my_cluster.token
+  }
+}

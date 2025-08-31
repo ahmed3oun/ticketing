@@ -8,11 +8,11 @@ spec:
   issuerRef:
     name: letsencrypt-prod # Reference to the ClusterIssuer
     kind: ClusterIssuer
-  commonName: grafana.ticketing.app.fr
+  commonName: grafana.ticketing.cheznouslabas.fr
   dnsNames:
-    - grafana.ticketing.app.fr
+    - grafana.ticketing.cheznouslabas.fr
   acme:
     config:
       - http01:
           ingressClass: nginx # The ingress class used by the NGINX Ingress Controller
-        domain: grafana.ticketing.app.fr # The domain for which the certificate is requested
+        domain: grafana.ticketing.cheznouslabas.fr # The domain for which the certificate is requested

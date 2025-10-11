@@ -3,7 +3,7 @@ import axios from 'axios';
 import { createContext, useState, useContext, useEffect } from 'react';
 
 export const AuthContext = createContext({
-    user: null,
+    user: { email: "test@test.com", name: "test user" },
     login: async (email, password) => { },
     register: async (email, password) => { },
     logout: () => { },
@@ -11,15 +11,20 @@ export const AuthContext = createContext({
 })
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({ email: "test@test.com", name: "test user" });
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         async function loadUser() {
             try {
-                const response = await axios.get('/api/v1/user/get-current-user');
-                const data = response.data.currentUser;
+                // const response = await axios.get('/api/v1/user/get-current-user');
+                // const data = response.data.currentUser;
+                const data = { email: "test@test.com", name: "test user" };
                 setUser(data || null)
+                console.log({
+                    user
+                });
+
             } catch (error) {
                 console.log(error);
                 setUser(null)

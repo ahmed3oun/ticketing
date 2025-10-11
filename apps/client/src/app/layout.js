@@ -1,21 +1,12 @@
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { AuthProvider } from "@/app/context/auth-context";
+import { Toaster } from "react-hot-toast";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const inter = Inter({
-  variable: "--font-inter",
   subsets: ["latin"],
 });
 
@@ -31,7 +22,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased font-[family-name:var(--font-inter)`}
+        className={`${inter.variable} antialiased font-[family-name:var(--font-inter)`}
       >
         <div>
           <AuthProvider>
@@ -40,7 +31,9 @@ export default function RootLayout({ children }) {
               {children}
             </main>
           </AuthProvider>
+
           <Footer />
+          <Toaster position='top-right' />
         </div>
       </body>
 

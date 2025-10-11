@@ -1,53 +1,86 @@
 // import axios from "axios"
+import Link from "next/link"
+import { Button } from "./ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
-import buildClient from "@/app/context/build-client"
+// import buildClient from "@/app/context/build-client"
+import { useEffect, useState } from "react"
+import useRequest from "@/hooks/use-request"
+import toast from "react-hot-toast"
 
 
-const Tickets = async () => {
-    let tickets = null
-    try {
-        const client = buildClient()
-        const response = await client.get('/api/v1/ticket/find')
-
-        tickets = response.data.tickets
-
-    } catch (error) {
-        tickets = [
-            {
-                'title': 'ticket concert',
-                'price': 200
-            },
-            {
-                'title': 'ticket ping pong',
-                'price': 150
-            },
-            {
-                'title': 'ticket cinema',
-                'price': 120
-            },
-        ]
-    }
+const Tickets = () => {
+    // const data = await fetch('https://api.vercel.app/blog')
+    // const posts = await data.json()
+    // const [posts, setPosts] = useState([]);
+    const [tickets, setTickets] = useState([]);
+    const { doRequest: showTickets, errors } = useRequest({
+        url: `/api/v1/tickets/find`,
+        method: 'get',
+        body: {},
+        onSuccess: (data) => console.log(data) && setTickets(data)
+    })
+    useEffect(() => {
+        async function fetchData() {
+            try {
+                // const client = buildClient()
+                // console.log('Tickets component mounted');
+                // const response = await client.get('https://api.vercel.app/blog')
+                // const posts = response.data
+                //
+                await showTickets()
+                // console.log(posts)
+                let tickets = posts.map(post => ({
+                    id: post.id,
+                    title: post.title,
+                    price: Math.floor(Math.random() * 200) + 50 // Random price between 50 and 250
+                }))
+                setTickets(tickets)
+            } catch (error) {
+                setTickets([
+                    {
+                        'id': 1,
+                        'title': 'ticket concert',
+                        'price': 200
+                    },
+                    {
+                        'id': 2,
+                        'title': 'ticket ping pong',
+                        'price': 150
+                    },
+                    {
+                        'id': 3,
+                        'title': 'ticket cinema',
+                        'price': 120
+                    },
+                ])
+                console.error('Error fetching tickets:', error)
+            }
+        }
+        if (!tickets.length)
+            fetchData();
+    }, []);
 
     return (
-        <>
+        <div className="flex flex-row gap-3 items-center justify-center overflow-auto">
             {
-                tickets && tickets.map((ticket => (
-                    <Card>
+                tickets && tickets.map(((ticket, index) => (
+                    <Card key={index} className='w-fit'>
                         <CardHeader>
                             <CardTitle>{ticket.title}</CardTitle>
-                            <CardDescription>{ticket.price}</CardDescription>
+                            <CardDescription>{ticket.price} $</CardDescription>
                         </CardHeader>
                         <CardContent>
-                            <p>This is the content of the card.</p>
+                            <Button className="mt-2 p-2" variant={'outline'} size={'md'}>
+                                <Link href={`/tickets/${ticket.id}`} className="btn btn-primary cursor-pointer">
+                                    View Details
+                                </Link>
+                            </Button>
                         </CardContent>
-                        <CardFooter>
-                            <button className="btn btn-primary">Action</button>
-                        </CardFooter>
                     </Card>
                 )))
             }
 
-        </>
+        </div >
     )
 
 }

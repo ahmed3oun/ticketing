@@ -1,6 +1,6 @@
 'use client'
 import ProtectedRoute from "@/components/protected-route";
-import { AuthContext, useAuth } from "./context/auth-context";
+import { AuthContext } from "./context/auth-context";
 import Tickets from "@/components/tickets";
 import { useContext } from "react";
 

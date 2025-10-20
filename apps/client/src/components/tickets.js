@@ -22,18 +22,11 @@ const Tickets = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                // const client = buildClient()
-                // console.log('Tickets component mounted');
+
                 // const response = await client.get('https://api.vercel.app/blog')
                 // const posts = response.data
-                //
                 await showTickets()
-                // console.log(posts)
-                let tickets = posts.map(post => ({
-                    id: post.id,
-                    title: post.title,
-                    price: Math.floor(Math.random() * 200) + 50 // Random price between 50 and 250
-                }))
+
                 setTickets(tickets)
             } catch (error) {
                 setTickets([
@@ -63,7 +56,7 @@ const Tickets = () => {
     return (
         <div className="flex flex-row gap-3 items-center justify-center overflow-auto">
             {
-                tickets && tickets.map(((ticket, index) => (
+                tickets && tickets?.map(((ticket, index) => (
                     <Card key={index} className='w-fit'>
                         <CardHeader>
                             <CardTitle>{ticket.title}</CardTitle>

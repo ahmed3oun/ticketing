@@ -5,12 +5,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFormStatus } from "react-dom";
 import { signup } from '@/app/actions/auth';
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { LogIn } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 
 
 export default function SignupForm() {
     const [state, action] = useActionState(signup, undefined)
+    const router= useRouter()
+
+    useEffect(() => {
+        if (state?.result?.status === 201 || state?.result?.status === 200) {
+            router.push('/')
+            window.location.reload()
+        }
+    }, [state, action])
 
     return (
         <>

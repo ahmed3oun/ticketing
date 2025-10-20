@@ -12,7 +12,9 @@ app.use(express.json());
 app.use(
     cookieSession({
         signed: false,
-        secure: process.env.NODE_ENV !== 'test', // Use secure cookies in production
+        // secure: process.env.NODE_ENV !== 'test', // Use secure cookies in production
+        secure: false, // Use secure cookies in production
+        httpOnly: true, // Prevent client-side JS from accessing the cookie
         sameSite: 'strict', // Prevent CSRF attacks
     })
 );

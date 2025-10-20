@@ -5,12 +5,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFormStatus } from "react-dom";
 import { signin } from '@/app/actions/auth';
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { LogIn } from "lucide-react";
+import { redirect, useRouter } from "next/navigation";
+
 
 
 export default function SigninForm() {
-    const [state, action] = useActionState(signin, undefined)
+    const [state, action] = useActionState(signin, undefined);
+    const router = useRouter()
+    useEffect(() => {
+        console.log({
+            state
+        });
+
+        if (state?.result?.status === 201 || state?.result?.status === 200) {
+            // reload window
+            window.location.reload()
+            router.push('/')
+
+        }
+    }, [state, action])
 
     return (
         <>

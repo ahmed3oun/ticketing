@@ -1,30 +1,29 @@
 'use client';
 import axios from 'axios';
-import { createContext, useState, useContext, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext({
-    user: { email: "test@test.com", name: "test user" },
+    user: null,
     login: async (email, password) => { },
     register: async (email, password) => { },
-    logout: () => { },
+    logout: async () => { },
     loading: true,
 })
 
 export function AuthProvider({ children }) {
-    const [user, setUser] = useState({ email: "test@test.com", name: "test user" });
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const router = useRouter()
     useEffect(() => {
         async function loadUser() {
             try {
-                // const response = await axios.get('/api/v1/user/get-current-user');
-                // const data = response.data.currentUser;
-                const data = { email: "test@test.com", name: "test user" };
-                setUser(data || null)
-                console.log({
-                    user
-                });
-
+                const response = await axios.get('/api/v1/user/get-current-user');
+                const data = response.data.currentUser;
+                return {
+                    data,
+                    status: response.status
+                }
             } catch (error) {
                 console.log(error);
                 setUser(null)
@@ -32,7 +31,16 @@ export function AuthProvider({ children }) {
                 setLoading(false)
             }
         }
-        loadUser();
+        loadUser().then(({ data, status }) => {
+            if (status === 200) {
+                setUser(data);
+                router.push('/')
+            }
+
+        }).catch(err => {
+            setUser(null);
+            router.push('/login')
+        })
     }, [])
 
     const login = async (email, password) => {
@@ -41,10 +49,10 @@ export function AuthProvider({ children }) {
                 email: email,
                 password: password
             })
-
+            setUser(res.data)
             return { data: res.data, status: res.status }
         } catch (error) {
-            throw new Error(error.response.message);
+            throw error;
         }
     }
 
@@ -54,16 +62,21 @@ export function AuthProvider({ children }) {
                 email: email,
                 password: password
             })
-
+            setUser(res.data)
             return { data: res.data, status: res.status }
         } catch (error) {
-            throw new Error(error.response.message);
+            throw error
         }
     }
 
     const logout = async () => {
-        await axios.post('api/v1/user/logout')
-        setUser(null);
+        const res = await axios.post('api/v1/user/logout')
+        if (res.status === 204) {
+            setUser(null);
+        }
+        return {
+            status: res.status
+        }
     };
 
 
@@ -73,8 +86,4 @@ export function AuthProvider({ children }) {
         </AuthContext.Provider>
     )
 }
-
-// export const useAuth = () => {
-//     return useContext(AuthContext)
-// }
 

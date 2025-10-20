@@ -20,7 +20,7 @@ class UserApiController extends BaseApiController {
     // /user/get-current-user
     async getMe() {
         try {
-
+            this.req.session && console.log('Session:', this.req.session);
             const currentUser = this.getCurrentUser();
             console.log('Current User:', currentUser);
 

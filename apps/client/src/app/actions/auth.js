@@ -1,17 +1,12 @@
-
+'use client';
 import { LoginFormSchema, SignupFormSchema } from "./definitions";
-// import { useAuth } from '@/app/context/auth-context'
-import { redirect } from "next/navigation";
-import { useContext } from "react";
-import { AuthContext } from "../context/auth-context";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 
-//const router = useRouter()
+
 
 export async function signin(state, formData) {
-    // const { login } = useContext(AuthContext);
-
     const validatedFields = LoginFormSchema.safeParse({
         email: formData.get("email"),
         password: formData.get("password"),
@@ -22,34 +17,23 @@ export async function signin(state, formData) {
             errors: validatedFields.error.flatten().fieldErrors,
         };
     }
-
-    console.log("Login attempt with data:", validatedFields.data);
     // Simulate a login process
+    const { data, status } = await login(formData.get("email"), formData.get("password"))
 
-    try {
-        const { data, status } = await login(formData.get("email"), formData.get("password"))
-        console.log({
-            data
-        });
-        if (status === 200) {
-            // router.push('/')
-            redirect('/')
-
-        }
-    } catch (error) {
-        console.log({
-            error
-        });
-
-        // return error.response.data;
+    if (status === 200) {
+        toast.success('Logged in successfully')
     }
+
+    return {
+        result: {
+            status,
+            data
+        }
+    }
+
 }
 
 export async function signup(state, formData) {
-
-    // const { register } = useContext(AuthContext);
-    // const router = useRouter()
-
     const validatedFields = SignupFormSchema.safeParse({
         email: formData.get("email"),
         password: formData.get("password"),
@@ -60,26 +44,18 @@ export async function signup(state, formData) {
             errors: validatedFields.error.flatten().fieldErrors,
         };
     }
-
-    console.log("Sign up attempt with data:", validatedFields.data);
     // Simulate a sign up process
+    const { data, status } = await register(formData.get("email"), formData.get("password"))
 
-    try {
-        const { data, status } = await register(formData.get("email"), formData.get("password"))
-        console.log({
+    if (status === 201) {
+        toast.success(`${data.message}`)
+    }
+
+    return {
+        result: {
+            status,
             data
-        });
-
-        if (status === 201) {
-            // router.push('/')
-            redirect('/')
         }
-    } catch (error) {
-        console.log({
-            error
-        });
-
-        // return error.response.data;
     }
 }
 
@@ -90,9 +66,12 @@ const login = async (email, password) => {
             password: password
         })
 
-        return { data: res.data, status: res.status }
+        if (res.status === 200) {
+            return { data: res.data, status: res.status }
+        }
+
     } catch (error) {
-        throw new Error(error.response.message);
+        toast.error(`${error.response.data.error.message}`)
     }
 }
 
@@ -105,6 +84,6 @@ const register = async (email, password) => {
 
         return { data: res.data, status: res.status }
     } catch (error) {
-        throw new Error(error.response.message);
+        toast.error(`${error.response.data.error.message}`)
     }
 }

@@ -1,17 +1,31 @@
-//import buildClient from "@/app/context/build-client"
-import axios from "axios";
-import { redirect } from "next/navigation";
+'use client'
+import { useContext, useEffect } from "react";
+import { AuthContext } from "@/app/context/auth-context";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-export default async () => {
+export default () => {
+
+
+    const router = useRouter()
+    const { logout } = useContext(AuthContext)
 
     //const client = buildClient();
-    try {
-        const resp = await axios.post('http://localhost:3000/api/v1/user/logout')
-
-        if (resp.status === 204) {
-            redirect('/login')
+    useEffect(() => {
+        async function performLogout() {
+            toast.loading('Logging you out...')
+            const { status } = await logout();
+            return status
         }
-    } catch (error) {
-        redirect('/login')
-    }
+        performLogout().then(status => {
+            if (status === 204) {
+                toast.dismiss();
+                toast.success('Logged out successfully')
+                router.push('/login')
+            } else {
+                toast.error('Something gone wrong')
+                router.push('/')
+            }
+        });
+    }, [])
 }

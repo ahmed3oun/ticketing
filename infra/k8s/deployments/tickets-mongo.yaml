@@ -1,8 +1,9 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: tickets-mongo-deploy
+  name: tickets-mongo # Use your StatefulSet name
 spec:
+  serviceName: tickets-mongo-srv
   replicas: 1
   selector:
     matchLabels:
@@ -15,6 +16,18 @@ spec:
       containers:
         - name: tickets-mongo
           image: mongo
+          volumeMounts:
+            - name: mongo-data
+              mountPath: /data/db # MongoDB data directory
+  volumeClaimTemplates: # This creates a PVC for each Pod
+  - metadata:
+      name: mongo-data # Name of the volume claim template
+    spec:
+      accessModes: [ "ReadWriteOnce" ] # Corrected field name
+      resources:
+        requests:
+          storage: 10Gi # Adjust size as needed
+      # storageClassName: standard # Uncomment if you need a specific StorageClass
 ---
 apiVersion: v1
 kind: Service

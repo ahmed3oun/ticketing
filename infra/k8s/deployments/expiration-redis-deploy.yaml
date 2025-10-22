@@ -1,8 +1,9 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: expiration-redis-deploy
+  name: expiration-redis
 spec:
+  serviceName: expiration-redis-srv
   replicas: 1
   selector:
     matchLabels:
@@ -14,7 +15,27 @@ spec:
     spec:
       containers:
         - name: expiration-redis
-          image: redis
+          image: redis:7.2-alpine
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data  # Redis writes data to /data
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi  # Adjust the size as needed
 ---
 apiVersion: v1
 kind: Service

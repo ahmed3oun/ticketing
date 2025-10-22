@@ -52,8 +52,6 @@ class AuthApiController extends BaseApiController {
                 jwt: token
             }
 
-            console.log('Session is populated',this.req.session.isPopulated);
-
 
             return this.res.status(200).send(user)
 

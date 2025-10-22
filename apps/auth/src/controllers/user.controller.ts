@@ -20,17 +20,13 @@ class UserApiController extends BaseApiController {
     // /user/get-current-user
     async getMe() {
         try {
-            this.req.session && console.log('Session:', this.req.session);
             const currentUser = this.getCurrentUser();
-            console.log('Current User:', currentUser);
-
             if (!currentUser) {
                 throw new ErrorHandler('Not authenticated', 401);
             }
             this.res.status(200).send({
                 currentUser
             });
-
         } catch (error: any) {
             return this.sendError(error);
         }

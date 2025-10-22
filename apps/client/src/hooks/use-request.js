@@ -12,11 +12,10 @@ export default ({ url, method, body, onSuccess }) => {
             if (onSuccess) {
                 onSuccess(response.data)
             }
-            return response.data
+            return response
         } catch (error) {
-            toast.error('Something went wrong')
             setErrors(error.response.data.errors)
-            throw new Error("Request failed");
+            throw error;
         }
     }
 

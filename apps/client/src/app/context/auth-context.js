@@ -1,6 +1,6 @@
 'use client';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { createContext, useState, useEffect } from 'react';
 
 export const AuthContext = createContext({
@@ -15,6 +15,7 @@ export function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter()
+    const currentPath = usePathname()
     useEffect(() => {
         async function loadUser() {
             try {
@@ -34,7 +35,9 @@ export function AuthProvider({ children }) {
         loadUser().then(({ data, status }) => {
             if (status === 200) {
                 setUser(data);
-                router.push('/')
+                if (['/login', '/signup'].includes(currentPath)) {
+                    router.push('/')
+                }
             }
 
         }).catch(err => {

@@ -11,12 +11,16 @@ import toast from "react-hot-toast";
 export default function TicketDetails() {
     const { ticketId } = useParams()
     const [ticket, setTicket] = useState(null)
+    const [isMounted, setIsMounted] = useState(false)
     // Fetch ticket details
     const { doRequest: showTicket, errors } = useRequest({
         url: `/api/v1/tickets/find/${ticketId}`,
         method: 'get',
-        body: {},
-        onSuccess: (data) => setTicket(data) && toast.success('Ticket fetched successfully')
+        onSuccess: (resData) => {
+            toast.success('Ticket fetched successfully')
+            setTicket(resData.data);
+            setIsMounted(true)
+        }
     })
     // Purchase ticket
     const { doRequest: purchaseTicket } = useRequest({
@@ -27,29 +31,28 @@ export default function TicketDetails() {
     })
 
     useEffect(() => {
+        console.log(`On mounted ticket details page of ticket id : ${ticketId}`);
+
         const fetchTicket = async () => {
             try {
-                toast.loading('Fetching ticket...')
-                await showTicket()
-                toast.dismiss()
-                toast.success('Ticket fetched successfully')
+                if (!isMounted) {
+                    setIsMounted(true)
+                    console.log(`fetching ticket...`);
+
+                    toast.loading('Fetching ticket...')
+                    await showTicket()
+                    toast.dismiss()
+                }
             } catch (error) {
-                console.log(error);
                 toast.dismiss()
                 toast.error('Error fetching ticket')
-                // For demo purposes, set a sample ticket
-                setTicket({
-                    id: ticketId,
-                    title: 'Sample Ticket',
-                    price: 100.00
-                })
             }
         }
-        ticket ?? fetchTicket()
+        if (!isMounted) fetchTicket()
     }, [])
 
     const orderTicket = async (e) => {
-        e.preventDefault();
+        // e.preventDefault();
         try {
             toast.loading('Purchasing ticket...')
             await purchaseTicket()

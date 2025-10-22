@@ -12,12 +12,12 @@ const Tickets = () => {
     // const data = await fetch('https://api.vercel.app/blog')
     // const posts = await data.json()
     // const [posts, setPosts] = useState([]);
-    const [tickets, setTickets] = useState([]);
+    const [tickets, setTickets] = useState(null);
     const { doRequest: showTickets, errors } = useRequest({
         url: `/api/v1/tickets/find`,
         method: 'get',
-        body: {},
-        onSuccess: (data) => console.log(data) && setTickets(data)
+        // body: {},
+        onSuccess: (resData) => setTickets(resData.data)
     })
     useEffect(() => {
         async function fetchData() {
@@ -25,31 +25,16 @@ const Tickets = () => {
 
                 // const response = await client.get('https://api.vercel.app/blog')
                 // const posts = response.data
-                await showTickets()
-
-                setTickets(tickets)
+                if (!Array.isArray(tickets).valueOf()) {
+                    const res = await showTickets()
+                    if (res.status === 200)
+                        toast.success('Fetched successfully!')
+                }
             } catch (error) {
-                setTickets([
-                    {
-                        'id': 1,
-                        'title': 'ticket concert',
-                        'price': 200
-                    },
-                    {
-                        'id': 2,
-                        'title': 'ticket ping pong',
-                        'price': 150
-                    },
-                    {
-                        'id': 3,
-                        'title': 'ticket cinema',
-                        'price': 120
-                    },
-                ])
-                console.error('Error fetching tickets:', error)
+                toast.error(errors)
             }
         }
-        if (!tickets.length)
+        if (!Array.isArray(tickets).valueOf())
             fetchData();
     }, []);
 

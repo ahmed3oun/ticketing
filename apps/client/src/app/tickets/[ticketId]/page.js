@@ -1,7 +1,7 @@
 'use client'
 import ProtectedRoute from "@/components/protected-route";
 import useRequest from "@/hooks/use-request";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useState } from "react";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import toast from "react-hot-toast";
 
 export default function TicketDetails() {
+    const router = useRouter();
     const { ticketId } = useParams()
     const [ticket, setTicket] = useState(null)
     const [isMounted, setIsMounted] = useState(false)
@@ -17,6 +18,7 @@ export default function TicketDetails() {
         url: `/api/v1/tickets/find/${ticketId}`,
         method: 'get',
         onSuccess: (resData) => {
+            toast.dismiss()
             toast.success('Ticket fetched successfully')
             setTicket(resData.data);
             setIsMounted(true)
@@ -27,7 +29,11 @@ export default function TicketDetails() {
         url: `/api/v1/orders/create`,
         method: 'post',
         body: { ticketId },
-        onSuccess: (data) => console.log(data) && toast.success('Ticket purchased successfully!')
+        onSuccess: (resData) => {
+            toast.dismiss()
+            toast.success('Ticket purchased successfully!')
+            router.push(`/orders/${resData.data.id}`)
+        }
     })
 
     useEffect(() => {
@@ -41,7 +47,7 @@ export default function TicketDetails() {
 
                     toast.loading('Fetching ticket...')
                     await showTicket()
-                    toast.dismiss()
+                    // toast.dismiss()
                 }
             } catch (error) {
                 toast.dismiss()
@@ -56,12 +62,9 @@ export default function TicketDetails() {
         try {
             toast.loading('Purchasing ticket...')
             await purchaseTicket()
-            toast.dismiss()
-            toast.success('Ticket purchased successfully!')
         } catch (error) {
             toast.dismiss()
-            toast.error('Error purchasing ticket')
-            console.log(error);
+            toast.error(error.response.data.error.message || 'Error purchasing ticket')
         }
     }
 

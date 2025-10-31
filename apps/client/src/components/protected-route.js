@@ -2,6 +2,7 @@
 import { AuthContext } from '@/app/context/auth-context';
 import { useRouter } from 'next/navigation';
 import { useContext, useEffect } from 'react';
+import LoadingIndicator from './ui/loading-indicator';
 
 export default function ProtectedRoute({
     children,
@@ -16,7 +17,7 @@ export default function ProtectedRoute({
     }, [user, loading, router]);
 
     if (loading || !user) {
-        return <div>Loading...</div>;
+        return <LoadingIndicator />;
     }
 
     return <>{children}</>;

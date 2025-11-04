@@ -28,6 +28,7 @@
     "cookie-session": "^2.1.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "ioredis": "^5.6.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
     "mongoose-update-if-current": "^1.4.0",

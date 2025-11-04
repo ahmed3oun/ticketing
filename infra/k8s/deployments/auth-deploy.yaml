@@ -18,6 +18,8 @@ spec:
           env:
             - name: MONGO_URI
               value: 'mongodb://tickets-mongo-srv:27017/tickets'
+            - name: REDIS_HOST
+              value: expiration-redis-srv
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:

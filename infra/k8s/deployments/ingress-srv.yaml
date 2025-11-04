@@ -4,6 +4,14 @@ metadata:
   name: ingress-service
   annotations:
     nginx.ingress.kubernetes.io/use-regex: 'true'
+    nginx.ingress.kubernetes.io/enable-real-ip: 'true'
+    nginx.ingress.kubernetes.io/proxy-real-ip-cidr: '0.0.0.0/0'
+    nginx.ingress.kubernetes.io/forwarded-for-header: 'X-Forwarded-For'
+    nginx.ingress.kubernetes.io/proxy-protocol: 'true'  # Required if using PROXY protocol
+       # Additional recommended settings for IP preservation
+    nginx.ingress.kubernetes.io/proxy-body-size: '10m'
+    nginx.ingress.kubernetes.io/proxy-buffering: 'off'
+    nginx.ingress.kubernetes.io/connection-proxy-header: 'keep-alive'
     # nginx.ingress.kubernetes.io/rewrite-target: /$1 # This rewrites the path to match the backend service
 spec:
   ingressClassName: nginx # Specify the ingress class to use
